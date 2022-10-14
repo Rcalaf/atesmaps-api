@@ -19,6 +19,9 @@ const observationSchema = new Schema({
         type: Number,
         default: 0,
     },
+    pictures: [{
+        type: String,
+    }],
     observationTypes: {
         quick: {
             status: {
@@ -180,12 +183,151 @@ const observationSchema = new Schema({
             status: {
                 type: Boolean,
                 default: false
+            },
+            values: {
+                date: {
+                    type: Date,
+                },
+                when: {
+                    type: Number,
+                },
+                amount: {
+                    type: Number
+                },
+                dangerLevel:{
+                    level_1:{type: Boolean},
+                    level_2:{type: Boolean},
+                    level_3:{type: Boolean},
+                    level_4:{type: Boolean},
+                    level_5:{type: Boolean},
+                },
+                avalancheType:{
+                    type_1:{type: Boolean},
+                    type_2:{type: Boolean},
+                    type_3:{type: Boolean},
+                    type_4:{type: Boolean},
+                    type_5:{type: Boolean},
+                    type_6:{type: Boolean},
+                    type_7:{type: Boolean},
+                    type_8:{type: Boolean},
+                    type_9:{type: Boolean},
+                },
+                depth:{
+                    type: String,
+                },
+                width:{
+                    type: String,
+                },
+                length:{
+                    type: String
+                },
+                trigger:{
+                    type: Number
+                },
+                height:{
+                    type:String
+                },
+                inclination:{
+                    type: String
+                },
+                heightRange:{
+                    range_1:{type: Boolean},
+                    range_2:{type: Boolean},
+                    range_3:{type: Boolean},
+                    range_4:{type: Boolean},
+                },
+                orientation:{
+                    N:{type: Boolean},
+                    NE:{type: Boolean},
+                    E:{type: Boolean},
+                    SE:{type: Boolean},
+                    S:{type: Boolean},
+                    SO:{type: Boolean},
+                    O:{type: Boolean},
+                    NO:{type: Boolean},
+                },
+                snowType:{
+                    type:String
+                },
+                windExposure: {
+                    type: Number
+                }
             }
         },
         snowpack: {
             status: {
                 type: Boolean,
                 default: false
+            },
+            values: {
+                observationType:{
+                    type: Number
+                },
+                altitudeRange: {
+                    range_1: {type: Boolean},
+                    range_2: {type: Boolean},
+                    range_3: {type: Boolean},
+                    range_4: {type: Boolean},
+                },
+                altitude:{
+                    type: String, 
+                },
+                orientation:{
+                    N:{type: Boolean},
+                    NE:{type: Boolean},
+                    E:{type: Boolean},
+                    SE:{type: Boolean},
+                    S:{type: Boolean},
+                    SO:{type: Boolean},
+                    O:{type: Boolean},
+                    NO:{type: Boolean},
+                },
+                depth: {
+                    type: String
+                },
+                woumpfs: {
+                    type: Boolean
+                },
+                sounds: {
+                    type: Boolean
+                },
+                layerSnowType: {
+                    type: Number
+                },
+                footPenetration: {
+                    type: String
+                },
+                skiPenetration: {
+                    type: String
+                },
+                handTest:{
+                    type: Number
+                },
+                compresionTest:{
+                    type: Number
+                },
+                extensionTest: {
+                    type: Number
+                },
+                fractureType: {
+                    type: Number
+                },
+                fractureDepth:{
+                    type: String
+                },
+                layerHardness: {
+                    type: Number
+                },
+                layerHumidity:{
+                    type: Number
+                },
+                snowType:{
+                    type: String
+                },
+                comments:{
+                    type: String
+                }
+
             }
         },
         weather: {
