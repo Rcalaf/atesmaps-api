@@ -15,8 +15,14 @@ router.route('/:id/observations')
 //     .put(observationsController.updateObservation)
 //     .delete(observationsController.deleteObservation);
 
-router.route('/')
+
+router.route('/:id')
+    .put(verifyRoles(ROLES_LIST.User), usersController.editUser);
+    
+router.route('/:id')
     .post(verifyRoles(ROLES_LIST.User), usersController.getUser);
+
+
 
 
 module.exports = router;

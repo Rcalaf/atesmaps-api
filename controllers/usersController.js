@@ -26,8 +26,22 @@ const getUser = async (req, res) => {
     res.json(user);
 }
 
+const editUser = async (req, res) =>{
+    
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ "message": 'User ID required' });
+    const user = await User.findOne({ _id: id }).exec();
+    if (!user) {
+        return res.status(204).json({ 'message': `User ID ${id} not found` });
+    }
+    //Update the user on the data base
+    console.log(req.body);
+    res.json(user);
+}
+
 module.exports = {
-    getAllUsers,
-    deleteUser,
-    getUser
+    getAllUsers,  
+    getUser,
+    editUser,
+    deleteUser
 }

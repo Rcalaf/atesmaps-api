@@ -6,9 +6,9 @@ const verifyRoles = require('../../middleware/verifyRoles');
 
 router.route('/')
     .get(observationsController.getAllObservations)
-    .post(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), observationsController.createNewObservation)
-    .put(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), observationsController.updateObservation)
-    .delete(verifyRoles(ROLES_LIST.Admin), observationsController.deleteObservation);
+    .post(verifyRoles(ROLES_LIST.User, ROLES_LIST.Editor), observationsController.createNewObservation)
+    .put(verifyRoles(ROLES_LIST.User, ROLES_LIST.Editor), observationsController.updateObservation)
+    .delete(verifyRoles(ROLES_LIST.User), observationsController.deleteObservation);
 
 router.route('/:id')
     .get(observationsController.getObservation);

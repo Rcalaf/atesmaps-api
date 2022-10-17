@@ -11,6 +11,54 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    name: {
+        type: String,
+        required: false
+    },
+    lastName:{
+        type: String,
+        required: false
+    },
+    gender:{
+        type: String,
+        required: false
+    },
+    birthday: {
+        type: Date,
+        required: false
+    },
+    instagraProfile:{
+        type: String,
+        required: false
+    }, 
+    twitterProfile:{
+        type: String,
+        required: false
+    },
+    professionOrientation: {
+        type: Number,
+        required: false
+    },
+    snowEducationLevel:{
+        type: Number,
+        required: false
+    },
+    snowExperienceLevel:{
+        type: Number,
+        required: false
+    },
+    exposure: {
+        type: Number,
+        required: false
+    },
+    terrainType:{
+        type: Number,
+        required: false
+    },
+    conditionsType:{
+        type: Number,
+        required: false
+    },
     roles: {
         User: {
             type: Number,
