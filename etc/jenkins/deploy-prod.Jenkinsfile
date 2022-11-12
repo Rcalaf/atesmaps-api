@@ -18,6 +18,15 @@ pipeline {
             }
         }
 
+        stage('Create .env file') {
+            steps {
+                configFileProvider(
+                    [configFile(fileId: 'atesmaps-api-env-prod', variable: 'ENV_FILE')]) {
+                    sh 'cat $ENV_FILE > .env'
+                }
+            }
+        }
+
         stage('Build docker image') {
             steps {
                 script {
