@@ -1,6 +1,6 @@
 #!groovy
 /*
-Jenkinsfile for deploy new Atesmaps API version to PRE-PRODUCTION environment.
+Jenkinsfile for deploy new Atesmaps API version to PRODUCTION environment.
 This job should be executed automatically when changes are pushed to develop branch
 or running manually using Jenkins.
 */
@@ -13,8 +13,8 @@ pipeline {
     stages {
         stage('Start') {
             steps {
-                sh('echo "Starting build and deploy tasks for Atesmaps API TEST environment..."')
-                sh('echo "Branch used for deploy: develop"')
+                sh('echo "Starting build and deploy tasks for Atesmaps API PROD environment..."')
+                sh('echo "Branch used for deploy: main"')
             }
         }
 
@@ -42,8 +42,8 @@ pipeline {
             steps {
                 script {
                     def remote = [:]
-                    remote.name = 'atesmaps-test'
-                    remote.host = '64.225.81.99'
+                    remote.name = 'atesmaps-prod'
+                    remote.host = '128.199.48.46'
                     remote.port = 2022
                     remote.allowAnyHosts = true
                     withCredentials([usernamePassword(
@@ -70,8 +70,8 @@ pipeline {
                 script {
                     def CURRENT_RELEASE = """${sh(returnStdout: true, script: 'git describe --tags `git rev-list --tags --max-count=1`').trim()}"""
                     def remote = [:]
-                    remote.name = 'atesmaps-test'
-                    remote.host = '64.225.81.99'
+                    remote.name = 'atesmaps-prod'
+                    remote.host = '128.199.48.46'
                     remote.port = 2022
                     remote.allowAnyHosts = true
                     withCredentials([
@@ -93,8 +93,7 @@ pipeline {
 
         stage('End') {
             steps {
-                sh('echo "New Atesmaps API version deployed in TEST environment..."')
-                sh('echo "Merge your changes to master branch for deploy in production or run job manually."')
+                sh('echo "New Atesmaps API version deployed in PROD environment..."')
                 sh('rm -rf ~/.ssh/id_rsa')
                 sh('rm -rf /tmp/atesmaps-api.tar')
             }
@@ -110,7 +109,7 @@ pipeline {
                     mimeType: 'text/html',
                     subject: "Build FAILED in Jenkins: ${env.JOB_BASE_NAME} - #${env.BUILD_NUMBER}",
                     body: "Job ${env.JOB_NAME} <b>ended with errors</b>.<br />Check console output at ${env.BUILD_URL} or download attachment to view the results.<br /> \
-                           <br />This build was executed using brach <b>develop</b>.<br /> \
+                           <br />This build was executed using branch <b>main</b>.<br /> \
                            If you do not want to receive these emails please contact the administrator.",
                     attachLog: true
         }
@@ -122,7 +121,7 @@ pipeline {
                     mimeType: 'text/html',
                     subject: "Build FAILED in Jenkins: ${env.JOB_BASE_NAME} - #${env.BUILD_NUMBER}",
                     body: "Job ${env.JOB_NAME} <b>ended with unstable status</b>.<br />Check console output at ${env.BUILD_URL} or download attachment to view the results.<br /> \
-                           <br />This build was executed using brach <b>develop</b>.<br /> \
+                           <br />This build was executed using branch <b>main</b>.<br /> \
                            If you do not want to receive these emails please contact the administrator.",
                     attachLog: true
         }

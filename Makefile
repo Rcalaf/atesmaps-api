@@ -1,7 +1,6 @@
 .ONESHELL:
 SHELL:=/bin/bash
 DOCKER_IMAGE:=atesmaps-api
-JENKINS_DOCKER_REPOSITORY:=jenkins
 CURRENT_RELEASE:=$(shell git describe --tags `git rev-list --tags --max-count=1`)
 RELEASE_FIX_NUMBER:=$(shell echo ${CURRENT_RELEASE} | cut -d "." -f3)
 RELEASE_MINOR_NUMBER:=$(shell echo ${CURRENT_RELEASE} | cut -d "." -f2)
