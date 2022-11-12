@@ -10,7 +10,7 @@ NEW_RELEASE:=$(RELEASE_MAJOR_NUMBER).$(RELEASE_MINOR_NUMBER).$(NEW_RELEASE_FIX_N
 
 
 .PHONY: run-app
-run-app:
+run-app: build
 	@ echo "Starting Atesmaps API..."
 	@ echo "Version deployed: ${CURRENT_RELEASE}"
 	docker run -d --restart=on-failure -p 9500:3500 --name atesmaps-api ${DOCKER_IMAGE}:${CURRENT_RELEASE}
