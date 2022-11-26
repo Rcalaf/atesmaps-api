@@ -14,10 +14,17 @@ const observationSchema = new Schema({
         latitude: String,
         longitude: String,
     },
-    
     status: {
         type: Number,
         default: 0,
+    },
+    submitted:{
+        type: Boolean,
+        default: false
+    },
+    sync: {
+        type: Boolean,
+        default: true
     },
     pictures: [{
         type: String,
@@ -342,8 +349,22 @@ const observationSchema = new Schema({
                 default: false
             }
         }
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     }
 
+});
+
+observationSchema.pre('remove', function(next) { 
+    let index = this.user.observations.indexOf(this._id);
+    if (index > -1) { 
+        this.user.observations.splice(index, 1); 
+        this.user.save();
+    }
+    next();
 });
 
 

@@ -35,7 +35,7 @@ const userSchema = new Schema({
         type: String,
         required: false
     },
-    professionOrientation: {
+    professionalOrientation: {
         type: Number,
         required: false
     },
@@ -47,7 +47,7 @@ const userSchema = new Schema({
         type: Number,
         required: false
     },
-    exposure: {
+    avalanchExposure: {
         type: Number,
         required: false
     },
