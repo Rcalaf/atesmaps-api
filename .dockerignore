@@ -1,0 +1,4 @@
+.dockerignore
+etc/
+node_modules
+npm-debug.log
