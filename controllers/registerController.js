@@ -98,7 +98,7 @@ const handleNewUser = async (req, res) => {
         //     // }
         //     console.log('Message %s sent: %s', info.messageId, info.response);
         //         //res.json({ roles, accessToken });
-        //         res.json({ userName: foundUser.userName, email:foundUser.email, userId:foundUser._id, roles, accessToken });
+                 res.json({ userName: foundUser.userName, email:foundUser.email, userId:foundUser._id, roles, accessToken });
         // });
         
 
