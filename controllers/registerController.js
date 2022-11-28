@@ -92,14 +92,14 @@ const handleNewUser = async (req, res) => {
         // Send authorization roles and access token to user
         
 
-        mailer.sendMail(mailOptions, (error, info) => {
-            // if (error) {
-            //     console.log(error);
-            // }
-            console.log('Message %s sent: %s', info.messageId, info.response);
-                //res.json({ roles, accessToken });
-                res.json({ userName: foundUser.userName, email:foundUser.email, userId:foundUser._id, roles, accessToken });
-        });
+        // mailer.sendMail(mailOptions, (error, info) => {
+        //     // if (error) {
+        //     //     console.log(error);
+        //     // }
+        //     console.log('Message %s sent: %s', info.messageId, info.response);
+        //         //res.json({ roles, accessToken });
+        //         res.json({ userName: foundUser.userName, email:foundUser.email, userId:foundUser._id, roles, accessToken });
+        // });
         
 
         //------ END Login after register code ----

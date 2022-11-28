@@ -53,9 +53,9 @@ const updateObservation = async (req, res) => {
 
 
 const deleteObservation = async (req, res) => {
-    console.log('------ Observation Controller delete action -----');
-    console.log(req.body._id);
-    console.log('------ END Observation Controller delete action -----');
+    // console.log('------ Observation Controller delete action -----');
+    // console.log(req.body._id);
+    // console.log('------ END Observation Controller delete action -----');
     if (!req.body?._id) return res.status(400).json({ "message": 'Observation ID required' });
     const observation = await Observation.findOne({ _id: req.body._id }).populate('user').exec();
     if (!observation) {
