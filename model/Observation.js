@@ -39,6 +39,9 @@ const observationSchema = new Schema({
                 ridingQuality: {
                     type: Number,
                 },
+                activityType: {
+                    type: Number,
+                },
                 snowConditions: {
                     deepPowder:{
                         type: Boolean,
@@ -94,7 +97,7 @@ const observationSchema = new Schema({
                         type: Boolean,
                         default: false,
                     },
-                    cut:{
+                    clear:{
                         type: Boolean,
                         default: false,
                     },
