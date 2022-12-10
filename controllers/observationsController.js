@@ -18,18 +18,16 @@ const getUserObservations = async (req, res) => {
 }
 
 const createNewObservation = async (req, res) => {
-    // if (!req?.body?.firstname || !req?.body?.lastname) {
-    //     return res.status(400).json({ 'message': 'First and last names are required' });
-    // }
+
     const user = await User.findOne({ _id: req.body.user });
     if (!user) return res.status(204).json({ 'message': 'No users found' });
     req.body.user = user;
-
+    req.body.status = 1; 
     try {
         const result = await Observation.create(req.body);
         user.observations.push(result.toObject({ getters: true }));
         await user.save();
-        return res.status(201).json(result);
+        return res.status(201).json(user.observations);
     } catch (err) {
         console.error(err);
         res.status(500).json({ 'message': 'Error creating observation' });
@@ -45,8 +43,7 @@ const updateObservation = async (req, res) => {
     if (!observation) {
         return res.status(204).json({ "message": `No observation matches ID ${req.body.id}.` });
     }
-    if (req.body?.firstname) employee.firstname = req.body.firstname;
-    if (req.body?.lastname) employee.lastname = req.body.lastname;
+
     const result = await observation.save();
     res.json(result);
 }

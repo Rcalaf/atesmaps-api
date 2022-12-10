@@ -53,8 +53,8 @@ const handleNewUser = async (req, res) => {
 
         //create and store the new user
         const user = await User.create({
-            "username": userName,
-            "email": email,
+            "username": userName?.toLowerCase()?.replace(/[^a-zA-Z0-9_ ]/g, ''),
+            "email": email?.toLowerCase(),
             "password": hashedPwd
         });
 
@@ -83,14 +83,12 @@ const handleNewUser = async (req, res) => {
         user.refreshToken = refreshToken;
         const result = await user.save();
         
-        console.log(result);
-        console.log(roles);
-
+        const { ['__v']: aux, ['observations'] : aux4 ,['password']: aux2, ['refreshToken']: aux3, ...restObject } = user._doc;
         // Creates Secure Cookie with refresh token
         res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
 
         // Send authorization roles and access token to user
-        
+        res.json({ user: restObject, accessToken });
 
         // mailer.sendMail(mailOptions, (error, info) => {
         //     // if (error) {
@@ -98,7 +96,7 @@ const handleNewUser = async (req, res) => {
         //     // }
         //     console.log('Message %s sent: %s', info.messageId, info.response);
         //         //res.json({ roles, accessToken });
-                 res.json({ userName: user.userName, email:user.email, userId:user._id, roles, accessToken });
+                // res.json({ userName: user.userName, email:user.email, userId:user._id, roles, accessToken });
         // });
         
 

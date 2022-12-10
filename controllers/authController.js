@@ -39,13 +39,16 @@ const handleLogin = async (req, res) => {
         foundUser.refreshToken = refreshToken;
         const result = await foundUser.save();
         //console.log(result);
-        console.log(foundUser);
+      
+    
+        const { ['__v']: aux, ['password']: aux2, ['refreshToken']: aux3, ['observations'] : aux4, ...restObject } = foundUser._doc;
 
         // Creates Secure Cookie with refresh token
         res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
 
         // Send authorization roles and access token and user details
-        res.json({ userName: foundUser.userName, email:foundUser.email, userId:foundUser._id, roles, accessToken });
+        res.json({ user: restObject, accessToken });
+        // res.json({ userName: foundUser.userName, email:foundUser.email, userId:foundUser._id, roles, accessToken });
 
     } else {
         res.sendStatus(401);

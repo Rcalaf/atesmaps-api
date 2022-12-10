@@ -31,9 +31,9 @@ const getUser = async (req, res) => {
 const editUser = async (req, res) =>{
     const { id } = req.params;
     console.log('------------edit user form body -------')
-    console.log(req.body);
+    // console.log(req.body);
     if (!id) return res.status(400).json({ "message": 'User ID required' });
-    console.log(id);
+    // console.log(id);
     const user = await User.findOne({ _id: id }).exec();
     if (!user) {
         return res.status(204).json({ 'message': `User ID ${id} not found` });
@@ -47,13 +47,24 @@ const editUser = async (req, res) =>{
         delete req.body.password;
         delete req.body.passwordConfirmation;
     }  
-    console.log(req.body);
-    let response = await User.updateOne({_id: id},req.body)
-   // let response = await user.save();
+    //console.log(req.body);
 
-    console.log(response);
-    //Update the user on the data base
-    res.json(user);
+    if( req.body.gender 
+        && req.body.professionalOrientation 
+        && req.body.snowEducationLevel 
+        && req.body.snowExperienceLevel 
+        && req.body.avalanchExposure 
+        && req.body.terrainType
+        && req.body.conditionsType) req.body.status = true;
+    
+    //console.log(req.body.status);
+          
+   let response = await User.updateOne({_id: id},req.body)
+   // let response = await user.save();
+   const { ['__v']: aux, ['password']: aux2, ['refreshToken']: aux3, ['observations'] : aux4, ...restObject } = user._doc;
+
+   //Update the user data back
+   res.json(restObject);
 }
 
 module.exports = {

@@ -11,8 +11,8 @@ const observationSchema = new Schema({
         required: false
     },
     location:{
-        latitude: String,
-        longitude: String,
+        latitude: Number,
+        longitude: Number,
     },
     status: {
         type: Number,
