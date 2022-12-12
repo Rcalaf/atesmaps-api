@@ -26,6 +26,9 @@ const observationSchema = new Schema({
         type: Boolean,
         default: true
     },
+    directoryId: {
+        type: String,
+    },
     pictures: [{
         type: String,
     }],
