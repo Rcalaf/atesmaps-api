@@ -5,6 +5,8 @@ const mailer = require('../config/mailer');
 
  
 const handleResetPassword = async (req, res) => {
+
+    console.log(req.params);
     const {email} = req.body;
     const user = await User.findOne({ email: email }).exec();
     if (user) {
@@ -13,7 +15,7 @@ const handleResetPassword = async (req, res) => {
             let savedUser = await user.save();
             let mailOptions = {
                 from: '"Atesmaps" <info@atesmaps.org>', // sender address
-                to: savedUser.email, // list of receivers
+                to: user.email, // list of receivers
                 subject: 'Petición de cambio de Password', // Subject line
                 text: 'Pinche en éste link para generar un nuevo password. https://atesmaps.org/admin/resetpassword/'+savedUser.resetPasswordToken, // plain text body
                 html: '<p><b>Pinche en éste link para generar un nuevo password</b></br><a href="https://atesmaps.org/admin/resetpassword/'+savedUser.resetPasswordToken+'">reset password</a></p>' // html body
@@ -87,22 +89,26 @@ const handleNewUser = async (req, res) => {
         // Creates Secure Cookie with refresh token
         res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
 
-        // Send authorization roles and access token to user
-        res.json({ user: restObject, accessToken });
+        let mailOptions = {
+            from: '"Atesmaps" <info@atesmaps.org>', // sender address
+            to: restObject.email, // list of receivers
+            subject: 'Bienvenidos a Atesmaps', // Subject line
+            text: 'Bienvenidos a Atesmaps, Os damos las gracias por vestra aportación como colaboradores.', // plain text body
+            html: '<p><b>Bienvenidos a Atesmaps,<b></p> <p> Os damos las gracias por vestra aportación como colaboradores.</p>' // html body
+        };
 
-        // mailer.sendMail(mailOptions, (error, info) => {
-        //     // if (error) {
-        //     //     console.log(error);
-        //     // }
-        //     console.log('Message %s sent: %s', info.messageId, info.response);
-        //         //res.json({ roles, accessToken });
-                // res.json({ userName: user.userName, email:user.email, userId:user._id, roles, accessToken });
-        // });
-        
+        mailer.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error);
+                res.json({ error: error});
+            }
+            console.log(info);
+            console.log('Registration Email sent...')
+        });
 
-        //------ END Login after register code ----
-        //  console.log(user);
-        //  res.status(201).json({ 'success': `New user ${user} created!` });
+       // Send authorization roles and access token to user
+       res.json({ user: restObject, accessToken });
+
 
     } catch (err) {
         console.log(err.message);
