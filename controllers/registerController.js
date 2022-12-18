@@ -5,10 +5,9 @@ const mailer = require('../config/mailer');
 
  
 const handleResetPassword = async (req, res) => {
-
     console.log(req.params);
     const {email} = req.body;
-    const user = await User.findOne({ email: email }).exec();
+    const user = await User.findOne({ email: email.toLowerCase() }).exec();
     if (user) {
         user.generatePasswordReset();
         try{
@@ -46,7 +45,7 @@ const handleNewUser = async (req, res) => {
     if (!email || !pwd) return res.status(400).json({ 'message': 'email and password are required.' });
 
     // check for duplicate usernames in the db
-    const duplicate = await User.findOne({ email: email }).exec();
+    const duplicate = await User.findOne({ email: email.toLowerCase() }).exec();
     if (duplicate) return res.sendStatus(409); //Conflict 
 
     try {
