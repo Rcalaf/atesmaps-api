@@ -35,7 +35,7 @@ const getUser = async (req, res) => {
 
 const editUser = async (req, res) =>{
     const { id } = req.params;
-    console.log('------------edit user form body -------')
+   // console.log('------------edit user form body -------')
     // console.log(req.body);
     if (!id) return res.status(400).json({ "message": 'User ID required' });
     // console.log(id);
@@ -60,8 +60,8 @@ const editUser = async (req, res) =>{
         delete req.body.password;
         delete req.body.passwordConfirmation;
     }  
-    //console.log(req.body);
-
+   
+    req.body.status = false;
     if( req.body.gender 
         && req.body.professionalOrientation 
         && req.body.snowEducationLevel 
@@ -70,14 +70,51 @@ const editUser = async (req, res) =>{
         && req.body.terrainType
         && req.body.conditionsType) req.body.status = true;
     
-    //console.log(req.body.status);
-          
-   let response = await User.updateOne({_id: id},req.body)
-   // let response = await user.save();
-   const { ['__v']: aux, ['password']: aux2, ['refreshToken']: aux3, ['observations'] : aux4, ...restObject } = user._doc;
+        // console.log("-----received from the app---");
+        // console.log(req.body);
+        // console.log("--------");
 
-   //Update the user data back
-   res.json(restObject);
+    user.name = req.body.name;
+    user.lastName = req.body.lastName;
+    user.gender = req.body.gender 
+    user.professionalOrientation = req.body.professionalOrientation 
+    user.snowEducationLevel = req.body.snowEducationLevel 
+    user.snowExperienceLevel = req.body.snowExperienceLevel 
+    user.avalanchExposure = req.body.avalanchExposure 
+    user.terrainType = req.body.terrainType
+    user.conditionsType = req.body.conditionsType
+    user.status = req.body.status
+   //let response = await User.findOne({_id: id},req.body)
+   try{
+        let response = await user.save();
+      
+       // console.log("----received from the app---");
+        let aux = { 'roles':user.roles,
+                    '_id':user._id, 
+                    'status': user.status ,
+                    'username' : user.username,
+                    'name': user.name,
+                    'lastName': user.lastName,
+                    'email': user.email,
+                    'avalanchExposure': user.avalanchExposure,
+                    'conditionsType': user.conditionsType,
+                    'gender': user.gender,
+                    'professionalOrientation': user.professionalOrientation,
+                    'snowEducationLevel': user.snowEducationLevel,
+                    'snowExperienceLevel': user.snowExperienceLevel,
+                    'terrainType': user.terrainType}
+       // console.log(aux);
+       // console.log("----------------------------");
+        res.json(aux);
+   }catch (e){
+        console.log(e);
+        res.json({'message': e});
+   }
+
+   
+   //const { ['__v']: aux, ['password']: aux2, ['refreshToken']: aux3, ['observations'] : aux4, ...restObject } = user;
+
+
 }
 
 module.exports = {
