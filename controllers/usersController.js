@@ -21,12 +21,17 @@ const getUser = async (req, res) => {
     //const { id } = req.body;
     const { id } = req.params;
     if (!id) return res.status(400).json({ "message": 'User ID required' });
-    const user = await User.findOne({ _id: id }).exec();
+    const user = await User.findOne({ _id: id }).exec();   
     if (!user) {
         return res.status(204).json({ 'message': `User ID ${id} not found` });
     }
     res.json(user);
 }
+
+
+
+
+
 
 const editUser = async (req, res) =>{
     const { id } = req.params;
@@ -42,7 +47,15 @@ const editUser = async (req, res) =>{
     if (req.body.password && req.body.passwordConfirmation) {
         console.log('Reset Password requested!');
         //hash new password:
-        //const hashedPwd = await bcrypt.hash(pwd, 12);
+        try {
+            let newPwd = req.body.password;
+            req.body.password = await bcrypt.hash(newPwd, 12);
+        } catch (e) {
+            console.log('Update user password failed!')
+            console.log(e);
+            delete req.body.password;
+            delete req.body.passwordConfirmation;
+        }
     } else {
         delete req.body.password;
         delete req.body.passwordConfirmation;

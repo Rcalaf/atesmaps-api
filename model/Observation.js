@@ -29,7 +29,7 @@ const observationSchema = new Schema({
     directoryId: {
         type: String,
     },
-    pictures: [{
+    images: [{
         type: String,
     }],
     observationTypes: {

@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const mailer = require('../config/mailer');
 
  
-const handleResetPassword = async (req, res) => {
+const handleRequestNewPassword = async (req, res) => {
     console.log(req.params);
     const {email} = req.body;
     const user = await User.findOne({ email: email.toLowerCase() }).exec();
@@ -16,8 +16,8 @@ const handleResetPassword = async (req, res) => {
                 from: '"Atesmaps" <info@atesmaps.org>', // sender address
                 to: user.email, // list of receivers
                 subject: 'Petición de cambio de Password', // Subject line
-                text: 'Pinche en éste link para generar un nuevo password. https://atesmaps.org/admin/resetpassword/'+savedUser.resetPasswordToken, // plain text body
-                html: '<p><b>Pinche en éste link para generar un nuevo password</b></br><a href="https://atesmaps.org/admin/resetpassword/'+savedUser.resetPasswordToken+'">reset password</a></p>' // html body
+                text: 'Pinche en éste link para generar un nuevo password. https://atesmaps.org/reset-password/'+savedUser.resetPasswordToken, // plain text body
+                html: '<p><b>Pinche en éste link para generar un nuevo password</b></br><a href="https://atesmaps.org/reset-password/'+savedUser.resetPasswordToken+'">reset password</a></p>' // html body
             };
 
             mailer.sendMail(mailOptions, (error, info) => {
@@ -115,4 +115,40 @@ const handleNewUser = async (req, res) => {
     }
 }
 
-module.exports = { handleNewUser, handleResetPassword };
+const handleResetPassword = async (req, res) => {
+    try{
+        const { token } = req.params;
+        const { password, passwordConfirmation } = req.body;
+
+        if (!token) return res.status(400).json({ "message": 'recovery token required' });
+        
+        const user = await User.findOne({ resetPasswordToken: token }).exec();
+        console.log(user);
+        if (!user) return res.status(200).json({ 'message': `Token no valid` });
+        
+        if (user.resetPasswordExpires < Date.now()) {
+            console.log('token expired...');
+            user.resetPasswordToken = null;
+            user.resetPasswordExpires = null;
+            const result = await user.save();
+            return res.status(200).json({ 'message': `Token expired` });
+        }
+
+        if (password != passwordConfirmation) return res.status(200).json({ 'message': `password don't match` });
+            
+        const hashedPwd = await bcrypt.hash(password, 12);
+        user.password = hashedPwd;
+        user.resetPasswordToken = null;
+        user.resetPasswordExpires = null;
+        console.log('password updated...');
+        console.log(user);
+        const result = await user.save();
+        res.status(200).json(user);
+    } catch (err){
+        res.status(500).json({ 'message': err.message });
+    }
+
+}
+
+
+module.exports = { handleNewUser, handleResetPassword, handleRequestNewPassword };

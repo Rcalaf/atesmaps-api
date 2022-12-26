@@ -71,7 +71,7 @@ const userSchema = new Schema({
         Editor: Number,
         Admin: Number
     },
-    restPasswordToken: String,
+    resetPasswordToken: String,
     resetPasswordExpires: Date,
     password: {
         type: String,
