@@ -16,8 +16,8 @@ const handleRequestNewPassword = async (req, res) => {
                 from: '"Atesmaps" <info@atesmaps.org>', // sender address
                 to: user.email, // list of receivers
                 subject: 'Petición de cambio de Password', // Subject line
-                text: 'Pinche en éste link para generar un nuevo password. https://atesmaps.org/reset-password/'+savedUser.resetPasswordToken, // plain text body
-                html: '<p><b>Pinche en éste link para generar un nuevo password</b></br><a href="https://atesmaps.org/reset-password/'+savedUser.resetPasswordToken+'">reset password</a></p>' // html body
+                text: 'Pinche en éste link para generar un nuevo password. https://test.atesmaps.org/reset-password/'+savedUser.resetPasswordToken, // plain text body
+                html: '<p><b>Pinche en éste link para generar un nuevo password</b></br><a href="https://test.atesmaps.org/reset-password/'+savedUser.resetPasswordToken+'">reset password</a></p>' // html body
             };
 
             mailer.sendMail(mailOptions, (error, info) => {
