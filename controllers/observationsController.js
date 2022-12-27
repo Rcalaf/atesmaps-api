@@ -18,12 +18,13 @@ const getUserObservations = async (req, res) => {
 }
 
 const createNewObservation = async (req, res) => {
-    console.log('This is a new oservation ody received...')
+    console.log('This is a new oservation body received...')
     console.log(req.body);
     const user = await User.findOne({ _id: req.body.user });
     if (!user) return res.status(204).json({ 'message': 'No users found' });
     req.body.user = user;
     req.body.status = 1; 
+    req.body.location = { type: 'Point', coordinates: [req.body.location.latitude,req.body.location.longitude] };
     try {
         const result = await Observation.create(req.body);
         // console.log(result);
@@ -39,7 +40,7 @@ const createNewObservation = async (req, res) => {
         // }
         user.observations.push(result.toObject({ getters: true }));
         await user.save();
-        return res.status(201).json({'observations': user.observations, 'observationId': result._id});
+        res.status(201).json({'observations': user.observations, 'observationId': result._id});
     } catch (err) {
         console.error(err);
         res.status(500).json({ 'message': 'Error creating observation' });
