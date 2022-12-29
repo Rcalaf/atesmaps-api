@@ -24,7 +24,7 @@ const createNewObservation = async (req, res) => {
     if (!user) return res.status(204).json({ 'message': 'No users found' });
     req.body.user = user;
     req.body.status = 1; 
-    req.body.location = { type: 'Point', coordinates: [req.body.location.latitude,req.body.location.longitude] };
+    req.body.location = { type: 'Point', coordinates: [req.body.location.longitude, req.body.location.latitude] };
     try {
         const result = await Observation.create(req.body);
         // console.log(result);
@@ -40,7 +40,7 @@ const createNewObservation = async (req, res) => {
         // }
         user.observations.push(result.toObject({ getters: true }));
         await user.save();
-        res.status(201).json({'observations': user.observations, 'observationId': result._id});
+        return res.status(201).json({'observations': user.observations, 'observationId': result._id});
     } catch (err) {
         console.error(err);
         res.status(500).json({ 'message': 'Error creating observation' });
@@ -84,6 +84,23 @@ const getObservation = async (req, res) => {
     res.json(observation);
 }
 
+const getFeatures = async (req, res) => {
+    console.log(req.params);
+    console.log(req.body);
+    console.log(req.query);
+   
+    const box = [[parseFloat(req.query.transformedbbox[3]),parseFloat(req.query.transformedbbox[2])],[parseFloat(req.query.transformedbbox[1]),parseFloat(req.query.transformedbbox[0])]];
+    console.log(box);
+    console.log(req.query.transformedbbox);
+    let data = await Observation.find({location: {
+        $geoWithin: {
+            $box: box,
+        }
+    }});
+    console.log(data)
+    res.send(data);
+}
+
 module.exports = {
     getAllObservations,
     getUserObservations,
@@ -91,4 +108,5 @@ module.exports = {
     updateObservation,
     deleteObservation,
     getObservation,
+    getFeatures
 }
