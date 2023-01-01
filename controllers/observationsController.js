@@ -1,5 +1,8 @@
 const Observation = require('../model/Observation');
 const User = require('../model/User');
+const GeoJSON = require('geojson');
+const proj4 = require('proj4');
+const { format } = require('date-fns');
 
 
 const getAllObservations = async (req, res) => {
@@ -85,20 +88,63 @@ const getObservation = async (req, res) => {
 }
 
 const getFeatures = async (req, res) => {
-    console.log(req.params);
-    console.log(req.body);
-    console.log(req.query);
+    // console.log(req.params);
+    // console.log(req.body);
+    // console.log(req.query);
    
     const box = [[parseFloat(req.query.transformedbbox[3]),parseFloat(req.query.transformedbbox[2])],[parseFloat(req.query.transformedbbox[1]),parseFloat(req.query.transformedbbox[0])]];
-    console.log(box);
-    console.log(req.query.transformedbbox);
+    // console.log(box);
+    // console.log(req.query.transformedbbox);
     let data = await Observation.find({location: {
         $geoWithin: {
             $box: box,
         }
-    }});
-    console.log(data)
-    res.send(data);
+    }}).populate('user');
+
+    let features = [];
+    data.forEach((feature)=>{
+        //let transformedCoors = proj4(proj4.defs('EPSG:4326'),proj4.defs('EPSG:3857'),[feature.location.coordinates[1],feature.location.coordinates[0]]);
+        features.push({
+            "type": "Feature",
+            "geometry": feature.location,
+            // "geometry":{
+            //     "type":'Point',
+            //     //"coordinates": [135685.76885505003, 5263083.799733077],
+            //     "coordinates": [transformedCoors[1],transformedCoors[0]],
+            //     "id":feature.location._id
+            // },
+            "properties":{
+                "title":feature.title,
+                "date":feature.date,
+                "directoryId":feature.directoryId,
+                "images":feature.images,
+                "observationTypes":feature.observationTypes,
+                "user": {
+                    "username": feature.user.username,
+                    "name": feature.user.name,
+                    "lastName": feature.user.lastName,
+                }
+            }
+        });
+    })
+    console.log(features[0]);
+    //let geodata = GeoJSON.parse(data, {Point:'location.coordinates'})
+    //console.log(geodata.features[0]);
+    // console.log(data)
+    res.json({
+        "type": "FeatureCollection",
+        "crs": {
+            "type": "name",
+            "properties": {
+              "name": "EPSG:4326",
+            },
+        },
+        "numberMatched":features.length,
+        "numberReturned":features.length,
+        "timeStamp": new Date(),
+        "totalFeatures":features.length,
+        "features":features
+    });
 }
 
 module.exports = {
