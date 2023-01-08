@@ -5,8 +5,7 @@ const corsOptions = {
         // console.log(origin);
         // console.log(allowedOrigins.indexOf(origin));
         if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-            return origin;
-            // callback(null, true)
+            callback(null, true)
         } else {
             callback(new Error('Not allowed by CORS'));
         }
