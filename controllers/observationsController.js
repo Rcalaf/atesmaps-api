@@ -27,7 +27,7 @@ const createNewObservation = async (req, res) => {
     if (!user) return res.status(204).json({ 'message': 'No users found' });
     req.body.user = user;
     req.body.status = 1; 
-    req.body.location = { type: 'Point', coordinates: [req.body.location.longitude, req.body.location.latitude] };
+    req.body.location = { type: 'Point', coordinates: [req.body.location.latitude, req.body.location.longitude] };
     try {
         const result = await Observation.create(req.body);
         // console.log(result);
@@ -100,7 +100,7 @@ const getFeatures = async (req, res) => {
             $box: box,
         }
     }}).populate('user');
-
+    console.log(data);
     let features = [];
     data.forEach((feature)=>{
         //let transformedCoors = proj4(proj4.defs('EPSG:4326'),proj4.defs('EPSG:3857'),[feature.location.coordinates[1],feature.location.coordinates[0]]);
@@ -114,6 +114,7 @@ const getFeatures = async (req, res) => {
             //     "id":feature.location._id
             // },
             "properties":{
+                "type": "observation",
                 "title":feature.title,
                 "date":feature.date,
                 "directoryId":feature.directoryId,
@@ -127,7 +128,8 @@ const getFeatures = async (req, res) => {
             }
         });
     })
-    console.log(features[0]);
+    // console.log(features[0]);
+    console.log(features);
     //let geodata = GeoJSON.parse(data, {Point:'location.coordinates'})
     //console.log(geodata.features[0]);
     // console.log(data)

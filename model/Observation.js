@@ -98,7 +98,7 @@ const observationSchema = new Schema({
                         type: Boolean,
                         default: false,
                     },
-                    convex:{
+                    shade:{
                         type: Boolean,
                         default: false,
                     },
@@ -125,7 +125,7 @@ const observationSchema = new Schema({
                     sunny:{
                         type: Boolean,
                         default: false,
-                    }
+                    },
                 },
                 avoidedSlopeTypes:{
                     alpine: {
@@ -203,7 +203,11 @@ const observationSchema = new Schema({
                     tempChanges:{
                         type: Boolean,
                         default: false,
-                    }
+                    },
+                    snowAccumulation:{
+                        type: Boolean,
+                        default: false,
+                    },
                 },
                 otherComments:{
                     type: String,   
