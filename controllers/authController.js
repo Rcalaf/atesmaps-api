@@ -56,7 +56,7 @@ const handleLogin = async (req, res) => {
 }
 
 const showVersion = (req, res) => {
-    res.status(200).json({ 'version': '0.4.4' });
+    res.status(200).json({ 'version': '0.4.0' });
 }
 
 module.exports = { handleLogin, showVersion};

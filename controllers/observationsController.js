@@ -100,7 +100,7 @@ const getFeatures = async (req, res) => {
             $box: box,
         }
     }}).populate('user');
-    console.log(data);
+    //console.log(data);
     let features = [];
     data.forEach((feature)=>{
         //let transformedCoors = proj4(proj4.defs('EPSG:4326'),proj4.defs('EPSG:3857'),[feature.location.coordinates[1],feature.location.coordinates[0]]);
@@ -129,7 +129,7 @@ const getFeatures = async (req, res) => {
         });
     })
     // console.log(features[0]);
-    console.log(features);
+   // console.log(features);
     //let geodata = GeoJSON.parse(data, {Point:'location.coordinates'})
     //console.log(geodata.features[0]);
     // console.log(data)
