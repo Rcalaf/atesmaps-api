@@ -9,10 +9,10 @@ const corsOptions = {
             callback(new Error('Not allowed by CORS'));
         }
     },
-    preflightContinue: true,
+    preflightContinue: false,
     credentials: true,
     maxAge:5,
-    optionsSuccessStatus: 200
+    optionsSuccessStatus: 204
 }
 
 // const corsOptions = {
