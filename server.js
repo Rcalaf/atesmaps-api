@@ -24,8 +24,13 @@ app.use(logger);
 app.use(credentials);
 
 // Cross Origin Resource Sharing
-app.use(cors(corsOptions));
-// app.use(cors());
+// app.use(cors(corsOptions));
+ app.use(cors({
+    "origin": "*",
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    "preflightContinue": false,
+    "optionsSuccessStatus": 204
+  }));
 
 // built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: false }));
