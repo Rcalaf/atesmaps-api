@@ -16,32 +16,20 @@ const getUserObservations = async (req, res) => {
     const user = await User.findOne({ _id: req.params.id }).populate('observations').exec();
     if (!user) return res.status(204).json({ 'message': 'No users found' });
     const observations = user.observations;
-    console.log(user);
+    // console.log(user);
     res.json(observations);
 }
 
 const createNewObservation = async (req, res) => {
     console.log('This is a new oservation body received...')
-    console.log(req.body.observationTypes.quick);
+    // console.log(req.body.observationTypes.quick);
     const user = await User.findOne({ _id: req.body.user });
     if (!user) return res.status(204).json({ 'message': 'No users found' });
     req.body.user = user;
     req.body.status = 1; 
     req.body.location = { type: 'Point', coordinates: [req.body.location.latitude, req.body.location.longitude] };
-
     try {
         const result = await Observation.create(req.body);
-        // console.log(result);
-        // let obj = { title: result.title,
-        //             date: result.date,
-        //             location: result.location,
-        //             status: result.status,
-        //             result.submitted,
-        //             result.sync,
-        //             result.directoryId,
-        //             result.pictures,
-        //             result.observationTypes  
-        // }
         user.observations.push(result.toObject({ getters: true }));
         await user.save();
         return res.status(201).json({'observations': user.observations, 'observationId': result._id});
