@@ -22,12 +22,13 @@ const getUserObservations = async (req, res) => {
 
 const createNewObservation = async (req, res) => {
     console.log('This is a new oservation body received...')
-    console.log(req.body);
+    console.log(req.body.observationTypes.quick);
     const user = await User.findOne({ _id: req.body.user });
     if (!user) return res.status(204).json({ 'message': 'No users found' });
     req.body.user = user;
     req.body.status = 1; 
     req.body.location = { type: 'Point', coordinates: [req.body.location.latitude, req.body.location.longitude] };
+
     try {
         const result = await Observation.create(req.body);
         // console.log(result);
@@ -88,31 +89,18 @@ const getObservation = async (req, res) => {
 }
 
 const getFeatures = async (req, res) => {
-    // console.log(req.params);
-    // console.log(req.body);
-    // console.log(req.query);
-   
     const box = [[parseFloat(req.query.transformedbbox[3]),parseFloat(req.query.transformedbbox[2])],[parseFloat(req.query.transformedbbox[1]),parseFloat(req.query.transformedbbox[0])]];
-    // console.log(box);
-    // console.log(req.query.transformedbbox);
     let data = await Observation.find({location: {
         $geoWithin: {
             $box: box,
         }
     }}).populate('user');
-    //console.log(data);
     let features = [];
     data.forEach((feature)=>{
         //let transformedCoors = proj4(proj4.defs('EPSG:4326'),proj4.defs('EPSG:3857'),[feature.location.coordinates[1],feature.location.coordinates[0]]);
         features.push({
             "type": "Feature",
             "geometry": feature.location,
-            // "geometry":{
-            //     "type":'Point',
-            //     //"coordinates": [135685.76885505003, 5263083.799733077],
-            //     "coordinates": [transformedCoors[1],transformedCoors[0]],
-            //     "id":feature.location._id
-            // },
             "properties":{
                 "type": "observation",
                 "title":feature.title,
@@ -128,11 +116,6 @@ const getFeatures = async (req, res) => {
             }
         });
     })
-    // console.log(features[0]);
-   // console.log(features);
-    //let geodata = GeoJSON.parse(data, {Point:'location.coordinates'})
-    //console.log(geodata.features[0]);
-    // console.log(data)
     res.json({
         "type": "FeatureCollection",
         "crs": {

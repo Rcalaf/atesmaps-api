@@ -209,7 +209,7 @@ const observationSchema = new Schema({
                         default: false,
                     },
                 },
-                otherComments:{
+                comments:{
                     type: String,   
                 }
             }
@@ -286,6 +286,9 @@ const observationSchema = new Schema({
                 },
                 windExposure: {
                     type: Number
+                },
+                comments:{
+                    type: String,   
                 }
             }
         },
