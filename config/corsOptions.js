@@ -1,17 +1,18 @@
 const allowedOrigins = require('./allowedOrigins');
 
 const corsOptions = {
+  
     origin: (origin, callback) => {
-        console.log('origin value sent to corsOptions');
-        console.log(origin);
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true)
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+            callback(err, true);
         } else {
             callback(new Error('Not allowed by CORS'));
         }
     },
-    maxAge:0,
-    optionsSuccessStatus: 204
+    preflightContinue: true,
+    credentials: true,
+    maxAge:5,
+    optionsSuccessStatus: 200
 }
 
 // const corsOptions = {
