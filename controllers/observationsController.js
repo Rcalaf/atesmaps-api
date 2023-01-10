@@ -85,7 +85,24 @@ const getFeatures = async (req, res) => {
     }}).populate('user');
     let features = [];
     data.forEach((feature)=>{
+        let terrainScore = 0;
+        switch(feature.user.terrainType) {
+            case 1:
+                terrainScore = 0.5
+              break;
+            case 2:
+                terrainScore = 1
+              break;
+            case 3:
+                terrainScore = 3
+              break;
+            default:
+                terrainScore = 0
+          }
         //let transformedCoors = proj4(proj4.defs('EPSG:4326'),proj4.defs('EPSG:3857'),[feature.location.coordinates[1],feature.location.coordinates[0]]);
+        let userTa =  (feature.user.professionalOrientation-1)+(feature.user.snowEducationLevel-1)+(feature.user.snowExperienceLevel*terrainScore);
+        let userRa =  feature.user.avalanchExposure + feature.user.conditionsType;
+        // console.log(feature.user);
         features.push({
             "type": "Feature",
             "geometry": feature.location,
@@ -100,6 +117,8 @@ const getFeatures = async (req, res) => {
                     "username": feature.user.username,
                     "name": feature.user.name,
                     "lastName": feature.user.lastName,
+                    "Ta": userTa,
+                    "Ra": userRa,
                 }
             }
         });
