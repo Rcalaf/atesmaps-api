@@ -29,7 +29,7 @@ const createNewObservation = async (req, res) => {
     console.log('in')
     req.body.user = user;
     req.body.status = 1; 
-    req.body.location = { type: 'Point', coordinates: [ req.body.location.longitude, req.body.location.latitude] };
+    req.body.location = { type: 'Point', coordinates: [  req.body.location.latitude, req.body.location.longitude] };
     try {
         const result = await Observation.create(req.body);
         user.observations.push(result.toObject({ getters: true }));
