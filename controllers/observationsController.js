@@ -82,16 +82,16 @@ const getObservation = async (req, res) => {
 
 const getFeatures = async (req, res) => {
     const box = [[parseFloat(req.query.transformedbbox[0]),parseFloat(req.query.transformedbbox[1])],[parseFloat(req.query.transformedbbox[2]),parseFloat(req.query.transformedbbox[3])]];
-    console.log(box);
+   // console.log(box);
     // const box = [[parseFloat(req.query.transformedbbox[3]),parseFloat(req.query.transformedbbox[2])],[parseFloat(req.query.transformedbbox[1]),parseFloat(req.query.transformedbbox[0])]];
     let data = await Observation.find({location: {
         $geoWithin: {
             $box: box,
         }
     }}).populate('user');
-    console.log('--------')
-    console.log(data);
-    console.log('--------')
+    // console.log('--------')
+    // console.log(data);
+    // console.log('--------')
     let features = [];
     data.forEach((feature)=>{
         let terrainScore = 0;
