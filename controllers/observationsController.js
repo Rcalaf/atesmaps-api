@@ -6,14 +6,15 @@ const { format } = require('date-fns');
 
 
 const getAllObservations = async (req, res) => {
-    const observations = await Observation.find();
+    const observations = await Observation.find().sort({date: 'desc'});
     //if (!observations) return res.status(204).json({ 'message': 'No observations found' });
     res.json(observations);
 }
 
 const getUserObservations = async (req, res) => {
     if (!req?.params?.id) return res.status(400).json({ "message": 'User ID required' });
-    const user = await User.findOne({ _id: req.params.id }).populate('observations').exec();
+    const options = { sort: [{"date": "desc" }] };
+    const user = await User.findOne({ _id: req.params.id }).populate({path:'observations',options}).exec();
     if (!user) return res.status(204).json({ 'message': 'No users found' });
     const observations = user.observations;
     // console.log(user);
@@ -88,7 +89,7 @@ const getFeatures = async (req, res) => {
         $geoWithin: {
             $box: box,
         }
-    }}).populate('user');
+    }}).sort({date: 'desc'}).populate('user');
     // console.log('--------')
     // console.log(data);
     // console.log('--------')
