@@ -29,7 +29,7 @@ const createNewObservation = async (req, res) => {
     console.log('in')
     req.body.user = user;
     req.body.status = 1; 
-    req.body.location = { type: 'Point', coordinates: [  req.body.location.latitude, req.body.location.longitude] };
+    req.body.location = { type: 'Point', coordinates: [  req.body.location.longitude, req.body.location.latitude] };
     try {
         const result = await Observation.create(req.body);
         user.observations.push(result.toObject({ getters: true }));
@@ -81,12 +81,17 @@ const getObservation = async (req, res) => {
 }
 
 const getFeatures = async (req, res) => {
-    const box = [[parseFloat(req.query.transformedbbox[3]),parseFloat(req.query.transformedbbox[2])],[parseFloat(req.query.transformedbbox[1]),parseFloat(req.query.transformedbbox[0])]];
+    const box = [[parseFloat(req.query.transformedbbox[0]),parseFloat(req.query.transformedbbox[1])],[parseFloat(req.query.transformedbbox[2]),parseFloat(req.query.transformedbbox[3])]];
+    console.log(box);
+    // const box = [[parseFloat(req.query.transformedbbox[3]),parseFloat(req.query.transformedbbox[2])],[parseFloat(req.query.transformedbbox[1]),parseFloat(req.query.transformedbbox[0])]];
     let data = await Observation.find({location: {
         $geoWithin: {
             $box: box,
         }
     }}).populate('user');
+    console.log('--------')
+    console.log(data);
+    console.log('--------')
     let features = [];
     data.forEach((feature)=>{
         let terrainScore = 0;
