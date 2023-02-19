@@ -31,7 +31,7 @@ const createNewObservation = async (req, res) => {
     req.body.location = { type: 'Point', coordinates: [  req.body.location.longitude, req.body.location.latitude] };
     try {
         const result = await Observation.create(req.body);
-        console.log(req.body.observationTypes.snowpack);
+        // console.log(req.body.observationTypes.snowpack);
         user.observations.push(result.toObject({ getters: true }));
         let saveResult = await user.save();
         // console.log(saveResult)
