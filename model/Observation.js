@@ -28,6 +28,9 @@ const observationSchema = new Schema({
         type: pointSchema,
         required: true
     },
+    whenObsTaken:{
+        type: Number
+    },
     // location:{
     //     latitude: Number,
     //     longitude: Number,
@@ -229,6 +232,9 @@ const observationSchema = new Schema({
                 amount: {
                     type: Number
                 },
+                obsType:{
+                    type: Number
+                },
                 dangerLevel:{
                     level_1:{type: Boolean},
                     level_2:{type: Boolean},
@@ -292,6 +298,51 @@ const observationSchema = new Schema({
                 }
             }
         },
+        accident: {
+            status: {
+                type: Boolean,
+                default: false
+            },
+            values: {
+                activityType:{
+                    type: Number
+                },
+                customActivityType:{
+                    type: String, 
+                },
+                numOfPeople:{
+                    type: String, 
+                },
+                numOfBuried:{
+                    type: String, 
+                },
+                numOfInjured:{
+                    type: String, 
+                },
+                numOfSeverlyInjured:{
+                    type: String, 
+                },
+                numOfDead:{
+                    type: String, 
+                },
+                terrainType:{
+                    type: Number
+                },
+                terrainTraps:{
+                    type: Number
+                },
+                avalancheSize:{
+                    size_1:{type: Boolean},
+                    size_2:{type: Boolean},
+                    size_3:{type: Boolean},
+                    size_4:{type: Boolean},
+                    size_5:{type: Boolean},
+                },
+                comments:{
+                    type: String,   
+                }
+            }
+        },
         snowpack: {
             status: {
                 type: Boolean,
@@ -299,6 +350,9 @@ const observationSchema = new Schema({
             },
             values: {
                 observationType:{
+                    type: Number
+                },
+                geolocationAccuracy:{
                     type: Number
                 },
                 altitudeRange: {
@@ -324,13 +378,18 @@ const observationSchema = new Schema({
                     type: String
                 },
                 woumpfs: {
-                    type: Boolean
+                    type: Number
                 },
-                sounds: {
-                    type: Boolean
+                cracks: {
+                    type: Number
                 },
                 layerSnowType: {
-                    type: Number
+                    type_1: {type: Boolean},
+                    type_2: {type: Boolean},
+                    type_3: {type: Boolean},
+                    type_4: {type: Boolean},
+                    type_5: {type: Boolean},
+                    type_6: {type: Boolean},
                 },
                 footPenetration: {
                     type: String
@@ -348,12 +407,20 @@ const observationSchema = new Schema({
                     type: Number
                 },
                 fractureType: {
-                    type: Number
+                    type_1: {type: Boolean},
+                    type_2: {type: Boolean},
+                    type_3: {type: Boolean},
+                    type_4: {type: Boolean},
+                    type_5: {type: Boolean},
+                    type_6: {type: Boolean},
                 },
                 fractureDepth:{
                     type: String
                 },
                 layerHardness: {
+                    type: Number
+                },
+                weakLayerHardness:{
                     type: Number
                 },
                 layerHumidity:{
@@ -369,12 +436,6 @@ const observationSchema = new Schema({
             }
         },
         weather: {
-            status: {
-                type: Boolean,
-                default: false
-            }
-        },
-        incident: {
             status: {
                 type: Boolean,
                 default: false

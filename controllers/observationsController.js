@@ -22,20 +22,19 @@ const getUserObservations = async (req, res) => {
 }
 
 const createNewObservation = async (req, res) => {
-    console.log('This is a new oservation body received...')
+    // console.log('This is a new oservation body received...')
     // console.log(req.body.observationTypes.quick);
     const user = await User.findOne({ _id: req.body.user });
-    console.log(user);
     if (!user) return res.status(204).json({ 'message': 'No users found' });
-    console.log('in')
     req.body.user = user;
     req.body.status = 1; 
     req.body.location = { type: 'Point', coordinates: [  req.body.location.longitude, req.body.location.latitude] };
     try {
         const result = await Observation.create(req.body);
+        console.log(req.body.observationTypes.snowpack);
         user.observations.push(result.toObject({ getters: true }));
         let saveResult = await user.save();
-        console.log(saveResult)
+        // console.log(saveResult)
         return res.status(201).json({'observations': user.observations, 'observationId': result._id});
     } catch (err) {
         console.log('error')
