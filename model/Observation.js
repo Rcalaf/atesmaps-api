@@ -173,6 +173,14 @@ const observationSchema = new Schema({
                         type: Boolean,
                         default: false,
                     },
+                    intenseSnow:{
+                        type: Boolean,
+                        default: false,
+                    },
+                    weakSnow:{
+                        type: Boolean,
+                        default: false,
+                    },
                     windy:{
                         type: Boolean,
                         default: false,
@@ -227,6 +235,9 @@ const observationSchema = new Schema({
                     type: Date,
                 },
                 when: {
+                    type: Number,
+                },
+                geoAccuracy: {
                     type: Number,
                 },
                 amount: {
@@ -325,6 +336,9 @@ const observationSchema = new Schema({
                 numOfDead:{
                     type: String, 
                 },
+                crackDepth:{
+                    type: String, 
+                },
                 terrainType:{
                     type: Number
                 },
@@ -340,6 +354,9 @@ const observationSchema = new Schema({
                 },
                 comments:{
                     type: String,   
+                },
+                contactMe: {
+                    type: Boolean,
                 }
             }
         },
@@ -352,7 +369,7 @@ const observationSchema = new Schema({
                 observationType:{
                     type: Number
                 },
-                geolocationAccuracy:{
+                geoAccuracy:{
                     type: Number
                 },
                 altitudeRange: {

@@ -31,6 +31,10 @@ const userSchema = new Schema({
         type: Date,
         required: false
     },
+    age: {
+        type: Number,
+        required: false
+    },
     instagraProfile:{
         type: String,
         required: false

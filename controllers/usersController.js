@@ -80,6 +80,9 @@ const editUser = async (req, res) =>{
     user.terrainType = req.body.terrainType
     user.conditionsType = req.body.conditionsType
     user.status = req.body.status
+    user.age = req.body.age
+    user.twitterProfile = req.body.twitterProfile
+    user.instagraProfile = req.body.instagraProfile
    //let response = await User.findOne({_id: id},req.body)
    try{
         let response = await user.save();
@@ -98,6 +101,9 @@ const editUser = async (req, res) =>{
                     'professionalOrientation': user.professionalOrientation,
                     'snowEducationLevel': user.snowEducationLevel,
                     'snowExperienceLevel': user.snowExperienceLevel,
+                    'age': user.age,
+                    'instagraProfile': user.instagraProfile,
+                    'twitterProfile': user.twitterProfile,
                     'terrainType': user.terrainType}
        // console.log(aux);
        // console.log("----------------------------");
