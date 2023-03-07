@@ -74,7 +74,7 @@ const editUser = async (req, res) =>{
         user.blocked = true;
         user.name = "Anonimous";
         user.lastName = "";
-        user.email = "@anonimous";
+        user.email = user._id+"@anonimous";
     } else{
         user.name = req.body.name;
         user.lastName = req.body.lastName;
