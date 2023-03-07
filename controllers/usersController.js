@@ -69,20 +69,24 @@ const editUser = async (req, res) =>{
         // console.log("-----received from the app---");
         // console.log(req.body);
         // console.log("--------");
-
-    user.name = req.body.name;
-    user.lastName = req.body.lastName;
-    user.gender = req.body.gender 
-    user.professionalOrientation = req.body.professionalOrientation 
-    user.snowEducationLevel = req.body.snowEducationLevel 
-    user.snowExperienceLevel = req.body.snowExperienceLevel 
-    user.avalanchExposure = req.body.avalanchExposure 
-    user.terrainType = req.body.terrainType
-    user.conditionsType = req.body.conditionsType
-    user.status = req.body.status
-    user.age = req.body.age
-    user.twitterProfile = req.body.twitterProfile
-    user.instagraProfile = req.body.instagraProfile
+   
+    if (req.body.blocked){
+        user.blocked = true;
+    } else{
+        user.name = req.body.name;
+        user.lastName = req.body.lastName;
+        user.gender = req.body.gender 
+        user.professionalOrientation = req.body.professionalOrientation 
+        user.snowEducationLevel = req.body.snowEducationLevel 
+        user.snowExperienceLevel = req.body.snowExperienceLevel 
+        user.avalanchExposure = req.body.avalanchExposure 
+        user.terrainType = req.body.terrainType
+        user.conditionsType = req.body.conditionsType
+        user.status = req.body.status
+        user.age = req.body.age
+        user.twitterProfile = req.body.twitterProfile
+        user.instagraProfile = req.body.instagraProfile
+    }
    //let response = await User.findOne({_id: id},req.body)
    try{
         let response = await user.save();

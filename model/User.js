@@ -7,6 +7,10 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     },
+    blocked: {
+        type: Boolean,
+        default: false
+    },
     username: {
         type: String,
         required: false

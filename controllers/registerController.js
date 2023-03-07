@@ -46,6 +46,7 @@ const handleNewUser = async (req, res) => {
 
     // check for duplicate usernames in the db
     const duplicate = await User.findOne({ email: email.toLowerCase() }).exec();
+    if (duplicate.blocked) return res.status(409).json({message: 'Esta cuenta está siendo borrada'});
     if (duplicate) return res.sendStatus(409); //Conflict 
 
     try {

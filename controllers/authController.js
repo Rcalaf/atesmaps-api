@@ -9,6 +9,8 @@ const handleLogin = async (req, res) => {
     const foundUser = await User.findOne({ email: email.toLowerCase() }).exec();
    
     if (!foundUser) return res.sendStatus(401); //Unauthorized 
+    if (foundUser.blocked) return res.status(409).json({message: 'Esta cuenta está siendo borrada'});
+
     console.log('----- Checking password -----');
     const match = await bcrypt.compare(pwd, foundUser.password);
     console.log(match);
