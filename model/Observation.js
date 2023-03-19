@@ -327,6 +327,9 @@ const observationSchema = new Schema({
                 numOfBuried:{
                     type: String, 
                 },
+                numOfPartiallyBuried:{
+                    type: String, 
+                },
                 numOfInjured:{
                     type: String, 
                 },
@@ -440,7 +443,7 @@ const observationSchema = new Schema({
                 weakLayerHardness:{
                     type: Number
                 },
-                layerHumidity:{
+                snowHumidity:{
                     type: Number
                 },
                 snowType:{
