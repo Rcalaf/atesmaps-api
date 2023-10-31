@@ -82,35 +82,50 @@ const getObservation = async (req, res) => {
 
 const getFeatures = async (req, res) => {
     const box = [[parseFloat(req.query.transformedbbox[0]),parseFloat(req.query.transformedbbox[1])],[parseFloat(req.query.transformedbbox[2]),parseFloat(req.query.transformedbbox[3])]];
-   // console.log(box);
+    // let aux_startDate = new Date(req.query.startDate);
+    // let aux_endDate = new Date(req.query.endDate)
+    // let startingDate = aux_startDate.getFullYear() + '-' + aux_startDate.getMonth() + '-' + aux_startDate.getDay();
+    // let endingDate = aux_endDate.getFullYear() + '-' +aux_endDate.getMonth() + '-' + aux_endDate.getDay();
+ 
+    // console.log(req.query.startDate.replaceAll('/', '-'));
+    // console.log(req.query.endDate.replaceAll('/', '-'));
+    // console.log(new Date(req.query.startDate.replaceAll('/', '-')))
+    // console.log(new Date(req.query.endDate.replaceAll('/', '-')))
     // const box = [[parseFloat(req.query.transformedbbox[3]),parseFloat(req.query.transformedbbox[2])],[parseFloat(req.query.transformedbbox[1]),parseFloat(req.query.transformedbbox[0])]];
-    let data = await Observation.find({location: {
+    let data = await Observation.find({$and:[{date: { $gte: new Date(req.query.startDate), $lte: new Date(req.query.endDate)}, location: {
         $geoWithin: {
             $box: box,
         }
-    }}).sort({date: 'desc'}).populate('user');
+    }}]}).sort({date: 'desc'}).populate('user');
     // console.log('--------')
     // console.log(data);
     // console.log('--------')
     let features = [];
     data.forEach((feature)=>{
         let terrainScore = 0;
-        switch(feature.user.terrainType) {
-            case 1:
-                terrainScore = 0.5
-              break;
-            case 2:
-                terrainScore = 1
-              break;
-            case 3:
-                terrainScore = 3
-              break;
-            default:
-                terrainScore = 0
-          }
-        //let transformedCoors = proj4(proj4.defs('EPSG:4326'),proj4.defs('EPSG:3857'),[feature.location.coordinates[1],feature.location.coordinates[0]]);
-        let userTa =  (feature.user.professionalOrientation-1)+(feature.user.snowEducationLevel-1)+(feature.user.snowExperienceLevel*terrainScore);
-        let userRa =  feature.user.avalanchExposure + feature.user.conditionsType;
+        let userTa =  -1;
+        let userRa =  -1;
+        if(feature.user){
+            switch(feature.user.terrainType) {
+                case 1:
+                    terrainScore = 0.5
+                break;
+                case 2:
+                    terrainScore = 1
+                break;
+                case 3:
+                    terrainScore = 3
+                break;
+                default:
+                    terrainScore = 0
+            }
+            //let transformedCoors = proj4(proj4.defs('EPSG:4326'),proj4.defs('EPSG:3857'),[feature.location.coordinates[1],feature.location.coordinates[0]]);
+            userTa = (feature.user.professionalOrientation-1)+(feature.user.snowEducationLevel-1)+(feature.user.snowExperienceLevel*terrainScore);
+            userRa = feature.user.avalanchExposure + feature.user.conditionsType;
+        }else{
+            terrainScore = -1;
+        }
+      
         // console.log(feature.user);
         features.push({
             "type": "Feature",
@@ -123,9 +138,9 @@ const getFeatures = async (req, res) => {
                 "images":feature.images,
                 "observationTypes":feature.observationTypes,
                 "user": {
-                    "username": feature.user.username,
-                    "name": feature.user.name,
-                    "lastName": feature.user.lastName,
+                    "username": feature.user ? feature.user.username : "annonymous",
+                    "name": feature.user ? feature.user.name : "annonymous",
+                    "lastName": feature.user ? feature.user.lastName : "annonymous",
                     "Ta": userTa,
                     "Ra": userRa,
                 }
