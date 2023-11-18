@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Get Previous tag
+      - name: Get latest tag
         id: latest_tag
         uses: WyriHaximus/github-action-get-previous-tag@v1
       - name: Get next minor version
@@ -51,10 +51,10 @@ jobs:
           file: etc/docker/Dockerfile
           push: false
           tags: |
-            atesmaps-api:${{ steps.semvers.outputs.v_patch }}
+            atesmaps-api:v0.0.6
       - name: Export Docker image
         run: |
-          docker save -o /tmp/atesmaps-api.tar atesmaps-api:${{ steps.semvers.outputs.v_patch }}
+          docker save -o /tmp/atesmaps-api.tar atesmaps-api:v0.0.6
       - name: Push Docker image artifact
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -83,15 +83,15 @@ jobs:
           script: |
             docker load -i /tmp/atesmaps-api.tar
             docker stop atesmaps-api || true && docker rm atesmaps-api || true
-            docker run -d --restart=always -p 9500:3500 --name atesmaps-api atesmaps-api:${{ steps.semvers.outputs.v_patch }}
+            docker run -d --restart=always -p 9500:3500 --name atesmaps-api atesmaps-api:v0.0.6
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.semvers.outputs.v_patch }}
-          release_name: ${{ steps.semvers.outputs.v_patch }}
+          tag_name: v0.0.6
+          release_name: v0.0.6
           body: |
             New Atesmaps API build released!
           draft: false
