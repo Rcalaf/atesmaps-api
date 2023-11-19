@@ -54,7 +54,7 @@ jobs:
             atesmaps-api:v0.0.6
       - name: Export Docker image
         run: |
-          docker save -o /tmp/atesmaps-api.tar atesmaps-api:v0.0.6
+          docker save atesmaps-api:v0.0.6 | gzip > /tmp/atesmaps-api.tar.gz
       - name: Push Docker image artifact
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -62,17 +62,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "/tmp/atesmaps-api.tar"
-          target: "/tmp/atesmaps-api.tar"
-      - name: Load new Docker image
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.SSH_TEST_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            docker load -i /tmp/atesmaps-api.tar
+          source: "/tmp/atesmaps-api.tar.gz"
+          target: "/tmp/atesmaps-api.tar.gz"
       - name: Run new release
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -81,7 +72,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            docker load -i /tmp/atesmaps-api.tar
+            gunzip -c /tmp/atesmaps-api.tar.gz | docker load
             docker stop atesmaps-api || true && docker rm atesmaps-api || true
             docker run -d --restart=always -p 9500:3500 --name atesmaps-api atesmaps-api:v0.0.6
       - name: Create Release
