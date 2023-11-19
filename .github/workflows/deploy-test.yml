@@ -54,20 +54,20 @@ jobs:
             atesmaps-api:v0.0.6
       - name: Export Docker image
         run: |
-          docker save atesmaps-api:v0.0.6 | gzip > /tmp/atesmaps-api.tar.gz
+          docker save atesmaps-api:v0.0.6 | gzip > ./atesmaps-api.tar.gz
       - name: Delete Me Step
         run: |
           ls -la
           docker images
           ls -la /tmp
       - name: Push Docker image artifact
-        uses: moonpathbg/scp_uploader@latest
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.SSH_TEST_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: /tmp/atesmaps-api.tar.gz
+          source: ./atesmaps-api.tar.gz
           target: /tmp
       - name: Run new release
         uses: appleboy/ssh-action@v1.0.0
