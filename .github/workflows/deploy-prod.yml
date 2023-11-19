@@ -1,17 +1,17 @@
-name: Deploy Test
+name: Deploy Production
 
 on:
   push:
     branches:
-      - develop
+      - main
   workflow_dispatch:
 
 concurrency:
-  group: deploy-test
+  group: deploy-prod
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
   id-token: write
 
 jobs:
@@ -25,11 +25,6 @@ jobs:
       - name: Get latest tag
         id: latest_tag
         uses: WyriHaximus/github-action-get-previous-tag@v1
-      - name: Get next minor version
-        id: semvers
-        uses: WyriHaximus/github-action-next-semvers@v1
-        with:
-          version: ${{ steps.latest_tag.outputs.tag }}
       - name: Create env file
         run: |
           echo "ACCESS_TOKEN_SECRET=${{ secrets.API_ACCESS_TOKEN_SECRET }}" > .env
@@ -45,14 +40,14 @@ jobs:
           file: etc/docker/Dockerfile
           push: false
           tags: |
-            atesmaps-api:${{ steps.semvers.outputs.v_patch }}
+            atesmaps-api:${{ steps.latest_tag.outputs.tag }}
       - name: Export Docker image
         run: |
-          docker save atesmaps-api:${{ steps.semvers.outputs.v_patch }} | gzip > ./atesmaps-api.tar.gz
+          docker save atesmaps-api:${{ steps.latest_tag.outputs.tag }} | gzip > ./atesmaps-api.tar.gz
       - name: Push Docker image artifact
         uses: appleboy/scp-action@v0.1.4
         with:
-          host: ${{ secrets.SSH_TEST_HOST }}
+          host: ${{ secrets.SSH_PROD_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
@@ -61,24 +56,12 @@ jobs:
       - name: Run new release
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.SSH_TEST_HOST }}
+          host: ${{ secrets.SSH_PROD_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
             gunzip -c /tmp/atesmaps-api.tar.gz | docker load
             docker stop atesmaps-api || true && docker rm atesmaps-api || true
-            docker run -d --restart=always -p 9500:3500 --name atesmaps-api atesmaps-api:${{ steps.semvers.outputs.v_patch }}
+            docker run -d --restart=always -p 9500:3500 --name atesmaps-api atesmaps-api:${{ steps.latest_tag.outputs.tag }}
             rm -f /tmp/atesmaps-api.tar.gz
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.semvers.outputs.v_patch }}
-          release_name: ${{ steps.semvers.outputs.v_patch }}
-          body: |
-            New Atesmaps API build released!
-          draft: false
-          prerelease: false
