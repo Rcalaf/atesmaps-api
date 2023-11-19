@@ -59,6 +59,7 @@ jobs:
         run: |
           ls -la
           docker images
+          ls -la /tmp
       - name: Push Docker image artifact
         uses: appleboy/scp-action@v0.1.4
         with:
