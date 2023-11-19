@@ -61,13 +61,13 @@ jobs:
           docker images
           ls -la /tmp
       - name: Push Docker image artifact
-        uses: appleboy/scp-action@v0.1.4
+        uses: moonpathbg/scp_uploader@latest
         with:
           host: ${{ secrets.SSH_TEST_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "/tmp/atesmaps-api.tar.gz"
+          source: /tmp/atesmaps-api.tar.gz
           target: /tmp
       - name: Run new release
         uses: appleboy/ssh-action@v1.0.0
