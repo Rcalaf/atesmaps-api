@@ -63,7 +63,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: "/tmp/atesmaps-api.tar.gz"
-          target: "/tmp/atesmaps-api.tar.gz"
+          target: /tmp
       - name: Run new release
         uses: appleboy/ssh-action@v1.0.0
         with:
