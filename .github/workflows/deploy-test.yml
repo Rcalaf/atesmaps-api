@@ -55,6 +55,10 @@ jobs:
       - name: Export Docker image
         run: |
           docker save atesmaps-api:v0.0.6 | gzip > /tmp/atesmaps-api.tar.gz
+      - name: Delete Me Step
+        run: |
+          ls -la
+          docker images
       - name: Push Docker image artifact
         uses: appleboy/scp-action@v0.1.4
         with:
