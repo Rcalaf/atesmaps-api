@@ -75,6 +75,7 @@ jobs:
             gunzip -c /tmp/atesmaps-api.tar.gz | docker load
             docker stop atesmaps-api || true && docker rm atesmaps-api || true
             docker run -d --restart=always -p 9500:3500 --name atesmaps-api atesmaps-api:v0.0.6
+            rm -f /tmp/atesmaps-api.tar.gz
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
