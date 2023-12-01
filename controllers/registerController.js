@@ -5,9 +5,12 @@ const mailer = require('../config/mailer');
 
  
 const handleRequestNewPassword = async (req, res) => {
-    console.log(req.params);
+    // console.log('params: ')
+    // console.log(req.body);
     const {email} = req.body;
+    // console.log(await User.find({}));
     const user = await User.findOne({ email: email.toLowerCase() }).exec();
+    // console.log(user);
     if (user) {
         user.generatePasswordReset();
         try{

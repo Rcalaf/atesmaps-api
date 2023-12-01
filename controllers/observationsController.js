@@ -13,11 +13,19 @@ const getAllObservations = async (req, res) => {
 
 const getUserObservations = async (req, res) => {
     if (!req?.params?.id) return res.status(400).json({ "message": 'User ID required' });
-    const options = { sort: [{"date": "desc" }] };
+    
+    //TODO: add pagination filter +  Date filter
+    const limit = 10;
+    if(req?.query?.page){
+        //let page = (!req?.query?.page ? req?.query?.page : 1);
+        const options = { limit: limit, skip: limit*(req.query.page-1), sort: [{"date": "desc" }] };
+    }else{
+        const options = { sort: [{"date": "desc" }] };
+    }
     const user = await User.findOne({ _id: req.params.id }).populate({path:'observations',options}).exec();
     if (!user) return res.status(204).json({ 'message': 'No users found' });
     const observations = user.observations;
-    // console.log(user);
+//  console.log(observations);
     res.json(observations);
 }
 
@@ -82,15 +90,6 @@ const getObservation = async (req, res) => {
 
 const getFeatures = async (req, res) => {
     const box = [[parseFloat(req.query.transformedbbox[0]),parseFloat(req.query.transformedbbox[1])],[parseFloat(req.query.transformedbbox[2]),parseFloat(req.query.transformedbbox[3])]];
-    // let aux_startDate = new Date(req.query.startDate);
-    // let aux_endDate = new Date(req.query.endDate)
-    // let startingDate = aux_startDate.getFullYear() + '-' + aux_startDate.getMonth() + '-' + aux_startDate.getDay();
-    // let endingDate = aux_endDate.getFullYear() + '-' +aux_endDate.getMonth() + '-' + aux_endDate.getDay();
- 
-    // console.log(req.query.startDate.replaceAll('/', '-'));
-    // console.log(req.query.endDate.replaceAll('/', '-'));
-    // console.log(new Date(req.query.startDate.replaceAll('/', '-')))
-    // console.log(new Date(req.query.endDate.replaceAll('/', '-')))
     // const box = [[parseFloat(req.query.transformedbbox[3]),parseFloat(req.query.transformedbbox[2])],[parseFloat(req.query.transformedbbox[1]),parseFloat(req.query.transformedbbox[0])]];
     let data = await Observation.find({$and:[{date: { $gte: new Date(req.query.startDate), $lte: new Date(req.query.endDate)}, location: {
         $geoWithin: {
