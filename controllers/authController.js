@@ -6,9 +6,11 @@ const handleLogin = async (req, res) => {
     const { email, pwd } = req.body;
     if (!email || !pwd) return res.status(400).json({ 'message': 'Email and password are required.' });
 
-    const foundUser = await User.findOne({ email: email }).exec();
+    const foundUser = await User.findOne({ email: email.toLowerCase() }).exec();
    
     if (!foundUser) return res.sendStatus(401); //Unauthorized 
+    // if (foundUser.blocked) return res.status(409).json({message: 'Esta cuenta está sido borrada'});
+
     console.log('----- Checking password -----');
     const match = await bcrypt.compare(pwd, foundUser.password);
     console.log(match);
@@ -26,28 +28,45 @@ const handleLogin = async (req, res) => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '30m' }
+            {}
+            // { expiresIn: '30m' }
         );
         const refreshToken = jwt.sign(
             { "username": foundUser.email },
             process.env.REFRESH_TOKEN_SECRET,
-            { expiresIn: '1d' }
+            {}
+            // { expiresIn: '1d' }
         );
         // Saving refreshToken with current user
         foundUser.refreshToken = refreshToken;
         const result = await foundUser.save();
         //console.log(result);
-        console.log(foundUser);
+      
+    
+        const { ['__v']: aux, ['password']: aux2, ['refreshToken']: aux3, ['observations'] : aux4, ...restObject } = foundUser._doc;
 
         // Creates Secure Cookie with refresh token
         res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
 
         // Send authorization roles and access token and user details
-        res.json({ userName: foundUser.userName, email:foundUser.email, userId:foundUser._id, roles, accessToken });
+        res.json({ user: restObject, accessToken });
+        // res.json({ userName: foundUser.userName, email:foundUser.email, userId:foundUser._id, roles, accessToken });
 
     } else {
         res.sendStatus(401);
     }
 }
 
-module.exports = { handleLogin };
+const showVersion = (req, res) => {
+    res.status(200).json({ 'version': '1.0.0' });
+}
+
+const showIosVersion = (req, res) => {
+    res.status(200).json({ 'version': '1.0.2' });
+}
+
+const showAndroidVersion = (req, res) => {
+    res.status(200).json({ 'version': '1.6' });
+}
+
+module.exports = { handleLogin, showVersion, showIosVersion, showAndroidVersion};

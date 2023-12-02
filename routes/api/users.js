@@ -18,9 +18,11 @@ router.route('/:id/observations')
 
 router.route('/:id')
     .put(verifyRoles(ROLES_LIST.User), usersController.editUser);
-    
+
 router.route('/:id')
-    .post(verifyRoles(ROLES_LIST.User), usersController.getUser);
+    .get(verifyRoles(ROLES_LIST.User), usersController.getUser);
+
+
 
 
 

@@ -13,4 +13,7 @@ router.route('/')
 router.route('/:id')
     .get(observationsController.getObservation);
 
+router.route('/user/:id')
+    .get(observationsController.getUserObservations);
+
 module.exports = router;

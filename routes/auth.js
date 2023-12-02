@@ -9,6 +9,6 @@ router.post('/register', registerController.handleNewUser);
 router.post('/login', authController.handleLogin);
 router.get('/refreshtoken', refreshTokenController.handleRefreshToken);
 router.get('/logout', logoutController.handleLogout);
-router.post('/resetpassword',registerController.handleResetPassword);
-
+router.post('/request-new-password',registerController.handleRequestNewPassword);
+router.post('/reset-password/:token',registerController.handleResetPassword);
 module.exports = router;

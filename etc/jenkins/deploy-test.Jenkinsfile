@@ -73,7 +73,7 @@ pipeline {
                     echo "Exporting atesmaps docker image to ZIP file..."
                     git pull
                     CURRENT_RELEASE=\$(git describe --tags `git rev-list --tags --max-count=1`)
-                    docker save -o /tmp/atesmaps-api.tar atesmaps-api:\$CURRENT_RELEASE
+                    docker save -o /tmp/atesmaps-api.tar atesmaps-api:v0.0.5
                     echo "ZIP file created at: /tmp/atesmaps-api.tar"
                 """
                 script {
@@ -93,7 +93,9 @@ pipeline {
                             remote.password = passwd
                             sshPut remote: remote, from: '/tmp/atesmaps-api.tar', into: '/tmp/atesmaps-api.tar'
                             sshCommand remote: remote, command: "docker load -i /tmp/atesmaps-api.tar"
-                            sshCommand remote: remote, command: "docker run -d --restart=always -p 9500:3500 --name atesmaps-api atesmaps-api:${CURRENT_RELEASE}"
+                            // FIXME: Git pull does not work yet as expect
+                            sshCommand remote: remote, command: "docker stop atesmaps-api || true && docker rm atesmaps-api || true"
+                            sshCommand remote: remote, command: "docker run -d --restart=always -p 9500:3500 --name atesmaps-api atesmaps-api:v0.0.5"
                             sshRemove remote: remote, path: '/tmp/atesmaps-api.tar'
                     }
                 }

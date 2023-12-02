@@ -3,6 +3,14 @@ const Schema = mongoose.Schema;
 const crypto = require('crypto');
 
 const userSchema = new Schema({
+    status: {
+        type: Boolean,
+        default: false
+    },
+    blocked: {
+        type: Boolean,
+        default: false
+    },
     username: {
         type: String,
         required: false
@@ -27,6 +35,10 @@ const userSchema = new Schema({
         type: Date,
         required: false
     },
+    age: {
+        type: Number,
+        required: false
+    },
     instagraProfile:{
         type: String,
         required: false
@@ -35,7 +47,7 @@ const userSchema = new Schema({
         type: String,
         required: false
     },
-    professionOrientation: {
+    professionalOrientation: {
         type: Number,
         required: false
     },
@@ -47,7 +59,7 @@ const userSchema = new Schema({
         type: Number,
         required: false
     },
-    exposure: {
+    avalanchExposure: {
         type: Number,
         required: false
     },
@@ -67,7 +79,7 @@ const userSchema = new Schema({
         Editor: Number,
         Admin: Number
     },
-    restPasswordToken: String,
+    resetPasswordToken: String,
     resetPasswordExpires: Date,
     password: {
         type: String,

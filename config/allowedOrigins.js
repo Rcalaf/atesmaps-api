@@ -1,8 +1,9 @@
 const allowedOrigins = [
-    'https://www.yoursite.com',
-    'http://127.0.0.1:3500',
-    'http://localhost:3500',
-    'http://localhost:3000'
+    'https://atesmaps.org',
+    'https://test.atesmaps.org',
+    'https://experimental.atesmaps.org',
+    'http://localhost:5000',
+    'https://obs.atesmaps.org'
 ];
 
 module.exports = allowedOrigins;
