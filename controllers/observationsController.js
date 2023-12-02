@@ -13,15 +13,17 @@ const getAllObservations = async (req, res) => {
 
 const getUserObservations = async (req, res) => {
     if (!req?.params?.id) return res.status(400).json({ "message": 'User ID required' });
-    
+    console.log(req?.query?.page);
     //TODO: add pagination filter +  Date filter
-    const limit = 10;
+    const limit = 5;
+    let options = {}
     if(req?.query?.page){
         //let page = (!req?.query?.page ? req?.query?.page : 1);
-        const options = { limit: limit, skip: limit*(req.query.page-1), sort: [{"date": "desc" }] };
+        options = { limit: limit, skip: limit*(req.query.page-1), sort: [{"date": "desc" }] };
     }else{
-        const options = { sort: [{"date": "desc" }] };
+        options = { sort: [{"date": "desc" }] };
     }
+    console.log(options)
     const user = await User.findOne({ _id: req.params.id }).populate({path:'observations',options}).exec();
     if (!user) return res.status(204).json({ 'message': 'No users found' });
     const observations = user.observations;

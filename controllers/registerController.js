@@ -6,7 +6,7 @@ const mailer = require('../config/mailer');
  
 const handleRequestNewPassword = async (req, res) => {
     // console.log('params: ')
-    // console.log(req.body);
+     console.log(req.body);
     const {email} = req.body;
     // console.log(await User.find({}));
     const user = await User.findOne({ email: email.toLowerCase() }).exec();
