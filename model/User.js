@@ -85,12 +85,16 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    
     refreshToken: String,
     observations: [{
         type: Schema.Types.ObjectId,
         ref: "Observation",
         required: false
     }]
+},
+{
+  timestamps: true
 });
 
 userSchema.methods.generatePasswordReset = function() {
