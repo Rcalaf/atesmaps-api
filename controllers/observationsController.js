@@ -10,7 +10,7 @@ const { format } = require('date-fns');
 
 const getAllObservations = async (req, res) => {
     let observations = null;
-    console.log(req.query);
+    // console.log(req.query);
     if(req.query.filter){
         var endDate = new Date();
         var startDate = new Date();
@@ -20,7 +20,7 @@ const getAllObservations = async (req, res) => {
     }else{
         observations = await Observation.find().sort({date: 'desc'});
     }
-    console.log(observations.length)
+    // console.log(observations.length)
     // if (!observations) return res.status(204).json({ 'message': 'No observations found' });
     res.json(observations);
 }
