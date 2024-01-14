@@ -5,9 +5,23 @@ const proj4 = require('proj4');
 const { format } = require('date-fns');
 
 
+
+
+
 const getAllObservations = async (req, res) => {
-    const observations = await Observation.find().sort({date: 'desc'});
-    //if (!observations) return res.status(204).json({ 'message': 'No observations found' });
+    let observations = null;
+    console.log(req.query);
+    if(req.query.filter){
+        var endDate = new Date();
+        var startDate = new Date();
+        var day = endDate.getDate() - req.query.filter;
+        startDate.setDate(day);
+        observations = await Observation.find({$and:[{date: { $gte: startDate }}]}).sort({date: 'desc'}).populate('user');
+    }else{
+        observations = await Observation.find().sort({date: 'desc'});
+    }
+    console.log(observations.length)
+    // if (!observations) return res.status(204).json({ 'message': 'No observations found' });
     res.json(observations);
 }
 
