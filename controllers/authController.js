@@ -66,7 +66,7 @@ const showIosVersion = (req, res) => {
 }
 
 const showAndroidVersion = (req, res) => {
-    res.status(200).json({ 'version': '2.3' });
+    res.status(200).json({ 'version': '2.4' });
 }
 
 module.exports = { handleLogin, showVersion, showIosVersion, showAndroidVersion};
