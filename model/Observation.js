@@ -12,7 +12,8 @@ const pointSchema = new mongoose.Schema({
       type: [Number],
       index: '2dsphere',
       required: true
-    }
+    },
+    // index: '2dsphere',
 });
 
 const observationSchema = new Schema({
@@ -26,15 +27,12 @@ const observationSchema = new Schema({
     },
     location: {
         type: pointSchema,
+        index: '2dsphere',
         required: true
     },
     whenObsTaken:{
         type: Number
     },
-    // location:{
-    //     latitude: Number,
-    //     longitude: Number,
-    // },
     status: {
         type: Number,
         default: 0,

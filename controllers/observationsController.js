@@ -5,19 +5,50 @@ const proj4 = require('proj4');
 const { format } = require('date-fns');
 
 
-
-
-
 const getAllObservations = async (req, res) => {
     let observations = null;
-    // console.log(req.query);
-    if(req.query.filter){
+    console.log(req.query);
+    if(req.query.days && req.query.long && req.query.lat ){
+        //Both days & location filter.
         var endDate = new Date();
         var startDate = new Date();
-        var day = endDate.getDate() - req.query.filter;
+        var day = endDate.getDate() - Number(req.query.days);
         startDate.setDate(day);
-        observations = await Observation.find({$and:[{date: { $gte: startDate }}]}).sort({date: 'desc'}).populate('user');
+        observations = await Observation.find({
+            $and:[
+                {date: { $gte: startDate }},
+                {location: {$near: 
+                    {$geometry: {
+                        type: 'Point',
+                        coordinates: [req.query.long, req.query.lat]
+                    },
+                    $maxDistance: 15000,
+                }}}
+            ]}).sort({date: 'desc'}).populate('user');
+    }else if(req.query.days && !(req.query.long && req.query.lat)){
+        //Only days filter.
+        var endDate = new Date();
+        var startDate = new Date();
+        var day = endDate.getDate() - Number(req.query.days);
+        startDate.setDate(day);
+        observations = await Observation.find({
+            $and:[
+                {date: { $gte: startDate }}
+            ]}).sort({date: 'desc'}).populate('user');
+    }else if(!req.query.days && (req.query.long && req.query.lat)){
+        //Only Location filter.
+        observations = await Observation.find({
+            $and:[
+                {location: {$near: 
+                    {$geometry: {
+                        type: 'Point',
+                        coordinates: [req.query.long, req.query.lat]
+                    },
+                    $maxDistance: 15000,
+                }}}
+            ]}).sort({date: 'desc'}).populate('user');
     }else{
+        //No filter.
         observations = await Observation.find().sort({date: 'desc'});
     }
     // console.log(observations.length)
