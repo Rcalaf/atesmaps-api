@@ -85,7 +85,12 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    
+    socialLogin: {
+        type: Boolean,
+        default: false
+    },
+    googleUserId: String,
+    appleUserId: String,
     refreshToken: String,
     observations: [{
         type: Schema.Types.ObjectId,
