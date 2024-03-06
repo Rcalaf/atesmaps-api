@@ -44,7 +44,7 @@ const getAllObservations = async (req, res) => {
                         type: 'Point',
                         coordinates: [req.query.long, req.query.lat]
                     },
-                    $maxDistance: 15000,
+                    $maxDistance: 25000,
                 }}}
             ]}).sort({date: 'desc'}).populate('user');
     }else{
