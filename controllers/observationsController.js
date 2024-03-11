@@ -14,17 +14,20 @@ const getAllObservations = async (req, res) => {
         var startDate = new Date();
         var day = endDate.getDate() - Number(req.query.days);
         startDate.setDate(day);
+        // observations = await Observation.find({
+        //     $and:[
+        //         {date: { $gte: startDate }},
+        //         {location: {$near: 
+        //             {$geometry: {
+        //                 type: 'Point',
+        //                 coordinates: [req.query.long, req.query.lat]
+        //             },
+        //             $maxDistance: 80000,
+        //         }}}
+        //     ]}).sort({date: 'desc'}).populate('user');
         observations = await Observation.find({
-            $and:[
-                {date: { $gte: startDate }},
-                {location: {$near: 
-                    {$geometry: {
-                        type: 'Point',
-                        coordinates: [req.query.long, req.query.lat]
-                    },
-                    $maxDistance: 80000,
-                }}}
-            ]}).sort({date: 'desc'}).populate('user');
+                    date: { $gte: startDate }  
+                }).sort({date: 'desc'}).populate('user');
     }else if(req.query.days && !(req.query.long && req.query.lat)){
         //Only days filter.
         var endDate = new Date();
@@ -37,19 +40,20 @@ const getAllObservations = async (req, res) => {
             ]}).sort({date: 'desc'}).populate('user');
     }else if(!req.query.days && (req.query.long && req.query.lat)){
         //Only Location filter.
-        observations = await Observation.find({
-            $and:[
-                {location: {$near: 
-                    {$geometry: {
-                        type: 'Point',
-                        coordinates: [req.query.long, req.query.lat]
-                    },
-                    $maxDistance: 80000,
-                }}}
-            ]}).sort({date: 'desc'}).populate('user');
+        // observations = await Observation.find({
+        //     $and:[
+        //         {location: {$near: 
+        //             {$geometry: {
+        //                 type: 'Point',
+        //                 coordinates: [req.query.long, req.query.lat]
+        //             },
+        //             $maxDistance: 80000,
+        //         }}}
+        //     ]}).sort({date: 'desc'}).populate('user');
+        observations = await Observation.find({}).sort({date: 'desc'}).populate('user');
     }else{
         //No filter.
-        observations = await Observation.find().sort({date: 'desc'});
+        observations = await Observation.find().sort({date: 'desc'}).populate('user');
     }
     // console.log(observations.length)
     // if (!observations) return res.status(204).json({ 'message': 'No observations found' });
