@@ -278,7 +278,7 @@ const showVersion = (req, res) => {
 }
 
 const showIosVersion = (req, res) => {
-    res.status(200).json({ 'version': '1.1.1' });
+    res.status(200).json({ 'version': '1.1.3' });
 }
 
 const showAndroidVersion = (req, res) => {
