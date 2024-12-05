@@ -63,7 +63,8 @@ const handleLogin = async (req, res) => {
         // res.json({ userName: foundUser.userName, email:foundUser.email, userId:foundUser._id, roles, accessToken });
 
     } else {
-        res.sendStatus(401);
+        res.status(401).send('Wrong credentials');
+        //res.sendStatus(401);
     }
 }
 
