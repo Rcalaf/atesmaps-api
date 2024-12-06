@@ -101,7 +101,7 @@ const jwtSingIn = async (user) => {
 
 const handleGoogleLogin = async (req, res) => {
     console.log("Goolge Login.")
-    console.log(req.body);
+    // console.log(req.body);
     const platform = req.body.platform;
     const token = req.body.tokenId;
 
@@ -199,15 +199,14 @@ const handleGoogleLogin = async (req, res) => {
 
 const handleAppleLogin = async (req, res) => {
     console.log("Apple Login.")
-    //console.log(req.body);
+    console.log(req.body);
     const token = req.body.tokenId;
     const platform = req.body.platform;
     const userDetails = req.body.user;
     //console.log( process.env.GOOGLE_IOS_CLIENT_ID)
     let isNewUser = false;
     try{
-        // console.log(jwtDecode(token))
-        console.log(req.body);
+        // console.log(jwtDecode(token));
         const {email, sub  } =  jwtDecode(token);
         let user = await User.findOne({$and: [{appleUserId: sub },{email: email.toLowerCase() }]}).exec();
         if (!user) {
