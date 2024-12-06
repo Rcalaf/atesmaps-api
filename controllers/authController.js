@@ -207,6 +207,7 @@ const handleAppleLogin = async (req, res) => {
     let isNewUser = false;
     try{
         // console.log(jwtDecode(token))
+        console.log(req.body);
         const {email, sub  } =  jwtDecode(token);
         let user = await User.findOne({$and: [{appleUserId: sub },{email: email.toLowerCase() }]}).exec();
         if (!user) {
