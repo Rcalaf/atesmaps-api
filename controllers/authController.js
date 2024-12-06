@@ -110,8 +110,8 @@ const handleGoogleLogin = async (req, res) => {
     if (platform === 'ios') clientId = process.env.GOOGLE_IOS_CLIENT_ID
     if (platform === 'android') clientId = process.env.GOOGLE_ANDROID_CLIENT_ID
     if (platform === 'web') clientID = process.env.GOOGLE_WEB_CLIENT_ID
-    console.log(platform)
-    console.log(token)
+    //console.log(platform)
+    //console.log(token)
 
    // const clientId = platform === 'ios' ? process.env.GOOGLE_IOS_CLIENT_ID : process.env.GOOGLE_ANDROID_CLIENT_ID; 
 
@@ -199,7 +199,7 @@ const handleGoogleLogin = async (req, res) => {
 
 const handleAppleLogin = async (req, res) => {
     console.log("Apple Login.")
-    console.log(req.body);
+    //console.log(req.body);
     const token = req.body.tokenId;
     const platform = req.body.platform;
     const userDetails = req.body.user;
@@ -289,7 +289,7 @@ const showVersion = (req, res) => {
 }
 
 const showIosVersion = (req, res) => {
-    res.status(200).json({ 'version': '1.1.4' });
+    res.status(200).json({ 'version': '1.1.5' });
 }
 
 const showAndroidVersion = (req, res) => {
