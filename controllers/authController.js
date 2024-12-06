@@ -101,10 +101,20 @@ const jwtSingIn = async (user) => {
 
 const handleGoogleLogin = async (req, res) => {
     console.log("Goolge Login.")
-    //console.log(req.body);
-    const token = req.body.tokenId;
+    console.log(req.body);
     const platform = req.body.platform;
-    const clientId = platform === 'ios' ? process.env.GOOGLE_IOS_CLIENT_ID : process.env.GOOGLE_ANDROID_CLIENT_ID; 
+    const token = req.body.tokenId;
+
+    //TODO: Add a third option WEB CLIENT ID.
+    let clientId 
+    if (platform === 'ios') clientId = process.env.GOOGLE_IOS_CLIENT_ID
+    if (platform === 'android') clientId = process.env.GOOGLE_ANDROID_CLIENT_ID
+    if (platform === 'web') clientID = process.env.GOOGLE_WEB_CLIENT_ID
+    console.log(platform)
+    console.log(token)
+
+   // const clientId = platform === 'ios' ? process.env.GOOGLE_IOS_CLIENT_ID : process.env.GOOGLE_ANDROID_CLIENT_ID; 
+
     //console.log( process.env.GOOGLE_IOS_CLIENT_ID)
     let isNewUser = false;
     try{

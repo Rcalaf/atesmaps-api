@@ -36,7 +36,7 @@ app.use(credentials);
 // });
 
 // Cross Origin Resource Sharing
- app.use(cors(corsOptions));
+//app.use(cors(corsOptions));
 //  app.use(cors({
 //     "origin": "*",
 //     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
