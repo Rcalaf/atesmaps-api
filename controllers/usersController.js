@@ -31,8 +31,8 @@ const getUser = async (req, res) => {
 
 const editUser = async (req, res) =>{
     const { id } = req.params;
-   // console.log('------------edit user form body -------')
-    // console.log(req.body);
+    //console.log('------------edit user form body -------')
+    //console.log(req.body);
     if (!id) return res.status(400).json({ "message": 'User ID required' });
     // console.log(id);
     const user = await User.findOne({ _id: id }).exec();
@@ -78,6 +78,7 @@ const editUser = async (req, res) =>{
     } else{
         user.name = req.body.name;
         user.lastName = req.body.lastName;
+        user.username = req.body.username;
         user.gender = req.body.gender 
         user.professionalOrientation = req.body.professionalOrientation 
         user.snowEducationLevel = req.body.snowEducationLevel 
@@ -92,9 +93,10 @@ const editUser = async (req, res) =>{
     }
    //let response = await User.findOne({_id: id},req.body)
    try{
+       // console.log('user saved')
         let response = await user.save();
-      
-       // console.log("----received from the app---");
+
+      // console.log("----received from the app---");
         let aux = { 'roles':user.roles,
                     '_id':user._id, 
                     'status': user.status ,
@@ -112,9 +114,9 @@ const editUser = async (req, res) =>{
                     'instagraProfile': user.instagraProfile,
                     'twitterProfile': user.twitterProfile,
                     'terrainType': user.terrainType}
-       // console.log(aux);
-       // console.log("----------------------------");
-        res.json(aux);
+        console.log(aux);
+        //console.log("----------------------------");
+        res.status(200).json(aux);
    }catch (e){
         console.log(e);
         res.json({'message': e});
