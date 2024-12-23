@@ -19,9 +19,12 @@ const deleteUser = async (req, res) => {
 
 const getUser = async (req, res) => {
     //const { id } = req.body;
-    const { id } = req.params;
+    const { id, populate } = req.params;
     if (!id) return res.status(400).json({ "message": 'User ID required' });
-    const user = await User.findOne({ _id: id }).exec();   
+    let user;
+    if (populate) user = await User.findOne({ _id: id }).populate('observations').populate('payments').exec();  
+    else user = await User.findOne({ _id: id }).exec();  
+
     if (!user) {
         return res.status(204).json({ 'message': `User ID ${id} not found` });
     }
@@ -66,31 +69,30 @@ const editUser = async (req, res) =>{
         && req.body.terrainType
         && req.body.conditionsType) req.body.status = true;
     
-        // console.log("-----received from the app---");
-        // console.log(req.body);
-        // console.log("--------");
-   
     if (req.body.blocked){
         user.blocked = true;
         user.name = "Anonimous";
         user.lastName = "";
         user.email = user._id+"@anonimous";
     } else{
-        user.name = req.body.name;
-        user.lastName = req.body.lastName;
-        user.username = req.body.username;
-        user.gender = req.body.gender 
-        user.professionalOrientation = req.body.professionalOrientation 
-        user.snowEducationLevel = req.body.snowEducationLevel 
-        user.snowExperienceLevel = req.body.snowExperienceLevel 
-        user.avalanchExposure = req.body.avalanchExposure 
-        user.terrainType = req.body.terrainType
-        user.conditionsType = req.body.conditionsType
-        user.status = req.body.status
-        user.age = req.body.age
-        user.twitterProfile = req.body.twitterProfile
-        user.instagraProfile = req.body.instagraProfile
+        if (req.body.name) user.name = req.body.name;
+        if (req.body.lastName) user.lastName = req.body.lastName;
+        if (req.body.username) user.username = req.body.username;
+        if (req.body.gender) user.gender = req.body.gender;
+        if (req.body.professionalOrientation) user.professionalOrientation = req.body.professionalOrientation 
+        if (req.body.snowEducationLevel) user.snowEducationLevel = req.body.snowEducationLevel 
+        if (req.body.snowExperienceLevel) user.snowExperienceLevel = req.body.snowExperienceLevel 
+        if (req.body.avalanchExposure) user.avalanchExposure = req.body.avalanchExposure 
+        if (req.body.terrainType) user.terrainType = req.body.terrainType
+        if (req.body.conditionsType) user.conditionsType = req.body.conditionsType
+        if (req.body.license) user.license = req.body.license
+        if (req.body.status) user.status = req.body.status
+        if (req.body.age) user.age = req.body.age
+        if (req.body.twitterProfile) user.twitterProfile = req.body.twitterProfile
+        if (req.body.instagraProfile) user.instagraProfile = req.body.instagraProfile
     }
+    // console.log('------- updated user ----')
+    // console.log(user);
    //let response = await User.findOne({_id: id},req.body)
    try{
        // console.log('user saved')
@@ -100,7 +102,7 @@ const editUser = async (req, res) =>{
         let aux = { 'roles':user.roles,
                     '_id':user._id, 
                     'status': user.status ,
-                    'username' : user.username,
+                    'username': user.username,
                     'name': user.name,
                     'lastName': user.lastName,
                     'email': user.email,
@@ -111,10 +113,12 @@ const editUser = async (req, res) =>{
                     'snowEducationLevel': user.snowEducationLevel,
                     'snowExperienceLevel': user.snowExperienceLevel,
                     'age': user.age,
+                    'license':user.license,
                     'instagraProfile': user.instagraProfile,
                     'twitterProfile': user.twitterProfile,
                     'terrainType': user.terrainType}
-        console.log(aux);
+        // console.log('-------    aux user ----')                    
+        // console.log(aux);
         //console.log("----------------------------");
         res.status(200).json(aux);
    }catch (e){

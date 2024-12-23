@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const usersController = require('../../controllers/usersController');
 const observationsController = require('../../controllers/observationsController');
+const subscriptionsController = require('../../controllers/subscriptionsController');
 const ROLES_LIST = require('../../config/roles_list');
 const verifyRoles = require('../../middleware/verifyRoles');
 
@@ -14,6 +15,9 @@ router.route('/:id/observations')
 //     .post(observationsController.createNewObservation)
 //     .put(observationsController.updateObservation)
 //     .delete(observationsController.deleteObservation);
+
+// router.route('/:id/subscriptions')
+//      .get(verifyRoles(ROLES_LIST.User), subscriptionsController.getUserSubscriptions)
 
 
 router.route('/:id')

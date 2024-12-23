@@ -1,21 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const pointSchema = new mongoose.Schema({
-    type: {
-      type: String,
-      enum: ['Point'],
-      default: 'Point',
-      required: true
-    },
-    coordinates: {
-      type: [Number],
-      index: '2dsphere',
-      required: true
-    },
-    // index: '2dsphere',
-});
-
 const trackSchema = new Schema({
     title: {
         type: String,
@@ -24,11 +9,6 @@ const trackSchema = new Schema({
     date:{
         type: Date,
         required: false
-    },
-    location: {
-        type: pointSchema,
-        index: '2dsphere',
-        required: true
     },
     status: {
         type: Number,

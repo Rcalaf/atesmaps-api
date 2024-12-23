@@ -89,6 +89,32 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     },
+    license:{
+        pro: {
+            type: Boolean, 
+            default: false
+        },
+        expiresAt:{
+            type: Number,
+            required: false
+        },
+        last_invoice: {
+            type: String,
+            required: false,
+        },
+        stripeId: {
+            type: String,
+            unique: true,
+        },
+    },
+    // pro: {
+    //     type: Boolean, 
+    //     default: false
+    // },
+    // expiresAt:{
+    //     type: Number,
+    //     required: false
+    // },
     googleUserId: String,
     appleUserId: String,
     refreshToken: String,
@@ -96,7 +122,17 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Observation",
         required: false
-    }]
+    }],
+    tracks: [{
+        type: Schema.Types.ObjectId,
+        ref: "Track",
+        required: false
+    }],
+    // subscriptions: [{
+    //     type: Schema.Types.ObjectId,
+    //     ref: "Subscription",
+    //     required: false
+    // }]
 },
 {
   timestamps: true
